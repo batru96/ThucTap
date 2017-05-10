@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_ban_hang"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/ban_hang" />
+        <item
+            android:id="@+id/nav_thuc_don"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/thuc_don" />
+        <item
+            android:id="@+id/nav_thong_ke"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/thong_ke" />
+    </group>
+    <item
+        android:title="@string/thiet_lap">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_thong_bao"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="@string/thong_bao" />
+                <item
+                    android:id="@+id/nav_cai_dat"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="@string/cai_dat" />
+            </group>
+        </menu>
+    </item>
+
+
+</menu>
