@@ -3,4 +3,8 @@
     <string name="menu_them">Them</string>
     <string name="close">Close Drawer</string>
     <string name="open">Open Drawer</string>
+    <string name="load_failed">Load Failed</string>
+    <string name="thong_ke">Thống kê</string>
+    <string name="thuc_don">Thực đơn</string>
+    <string name="ban_hang">Bán hàng</string>
 </resources>
