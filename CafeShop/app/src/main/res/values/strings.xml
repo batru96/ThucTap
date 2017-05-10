@@ -16,4 +16,11 @@
     <string name="thiet_lap">Thiết lập</string>
     <string name="thong_bao">Thông báo</string>
     <string name="cai_dat">Cài đặt</string>
+    <string name="chua_co_khach">Chưa có khách gọi món</string>
+    <string name="chon_mon">Bấm vào đây hoặc dấu + để chọn món</string>
+    <string name="tinh_tien">Tính tiền</string>
+    <string name="cat">Cất</string>
+    <string name="thu_tien">Thu tiền</string>
+    <string name="xoa">Xóa</string>
+    <string name="tong_tien">Tổng tiền</string>
 </resources>

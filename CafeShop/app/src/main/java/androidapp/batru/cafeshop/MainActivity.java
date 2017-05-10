@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,17 +10,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+    private TextView txtChonMon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initControls();
+    }
+
+    private void initControls() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Bán hàng");
         setSupportActionBar(toolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -30,6 +40,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        txtChonMon = (TextView) findViewById(R.id.chonMonTextView);
+        txtChonMon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openChonMon();
+            }
+        });
+    }
+
+    private void openChonMon() {
+        startActivity(new Intent(this, ChonMonActivity.class));
     }
 
     @Override
@@ -57,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
+            openChonMon();
             return true;
         }
 
@@ -68,17 +91,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-         if (id == R.id.nav_ban_hang) {
-
-        } else if (id == R.id.nav_thuc_don) {
-
-        } else if (id == R.id.nav_thong_ke) {
-
-        } else if (id == R.id.nav_thong_bao) {
-
-        } else if (id == R.id.nav_cai_dat) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_ban_hang:
+                break;
+            case R.id.nav_thuc_don:
+                break;
+            case R.id.nav_thong_ke:
+                break;
+            case R.id.nav_thong_bao:
+                break;
+            case R.id.nav_cai_dat:
+                break;
+            default:
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
