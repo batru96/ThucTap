@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/listButton"
+    android:orientation="vertical"
+    android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="androidapp.batru.cafeshop.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/chonMonTextView"
-        android:layout_centerHorizontal="true"
-        android:text="@string/chua_co_khach"
-        android:textColor="#000"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/chonMonTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/chon_mon"
-        android:textColor="@color/fbutton_color_belize_hole"
-        android:textSize="16sp" />
-</RelativeLayout>
+</LinearLayout>

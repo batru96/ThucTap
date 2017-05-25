@@ -1,30 +1,121 @@
 package androidapp.batru.cafeshop;
 
-import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import database.Database;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
-    private TextView txtChonMon;
+    private LinearLayout layoutContent;
+
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        khoiTaoDatabase();
+        //addDefaultValue();
         initControls();
+    }
+
+    private void hienThiSoBan() {
+        Cursor data = db.getData("SELECT * FROM BanAn");
+
+        int soLuongButtonTrenDong = 4;
+        int indexLayout = 1, soLuongLayout = data.getCount() / soLuongButtonTrenDong;
+        int indexButton = 1;
+
+        for (int i = 1; i <= soLuongLayout; i++) {
+            LinearLayout horizontalLayout = new LinearLayout(this);
+            horizontalLayout.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            while(indexButton <= soLuongButtonTrenDong * indexLayout) {
+                final Button button = new Button(this);
+                button.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setText("Ban " + indexButton);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String tenBan = button.getText().toString();
+                        String soBan = tenBan.replaceAll("[^0-9]", "");
+                        int idBan = Integer.parseInt(soBan) - 1;
+                        Toast.makeText(MainActivity.this, idBan + "", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                horizontalLayout.addView(button);
+                indexButton++;
+            }
+            indexLayout++;
+            layoutContent.addView(horizontalLayout);
+        }
+    }
+
+    private void addDefaultValue() {
+        db.queryData("INSERT INTO ThucDon VALUES (null, 'Chim cuc chien bo', 15000, 'Cai', null, 'TRUE')");
+        Cursor data = db.getData("SELECT * FROM ThucDon");
+        while (data.moveToNext()) {
+            String name = data.getString(1);
+            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void khoiTaoDatabase() {
+        db = new Database(this, "BanHang.sqlite", null, 1);
+
+        db.queryData("CREATE TABLE IF NOT EXISTS ThucDon" +
+                "(" +
+                "Id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "Ten VARCHAR," +
+                "Gia INTEGER," +
+                "DonViTinh VARCHAR," +
+                "HinhAnh TEXT," +
+                "ConHang BOOL)");
+
+        db.queryData("CREATE TABLE IF NOT EXISTS BanAn" +
+                "(" +
+                "SoBan INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "SoNguoi INTEGER DEFAULT 0," +
+                "ConTrong BOOL DEFAULT TRUE" +
+                ")");
+
+        db.queryData("CREATE TABLE IF NOT EXISTS BanAn_MonAn(" +
+                "SoBan INTEGER," +
+                "MonAn INTEGER," +
+                "SoLuong INTEGER," +
+                "PRIMARY KEY (SoBan, MonAn)," +
+                "FOREIGN KEY (SoBan) REFERENCES BanAn(SoBan)," +
+                "FOREIGN KEY (MonAn) REFERENCES ThucDon(Id))");
+
+        db.queryData("CREATE TABLE IF NOT EXISTS HoaDon" +
+                "(" +
+                "SoHoaDon INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "ThoiGian DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                "BanAn INTEGER," +
+                "FOREIGN KEY (BanAn) REFERENCES BanAn(SoBan))");
+
+    }
+
+    private void themThucDon(ThucDon thucDon) {
+        db.queryData("INSERT INTO ThucDon VALUES (null,'" + thucDon.getTen() + "'," + thucDon.getGia() + ",'" + thucDon.getDonVi() + "','" + thucDon.getHinhAnh() + "','" + thucDon.isConHang() + "')");
     }
 
     private void initControls() {
@@ -41,17 +132,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        txtChonMon = (TextView) findViewById(R.id.chonMonTextView);
-        txtChonMon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openChonMon();
-            }
-        });
-    }
-
-    private void openChonMon() {
-        startActivity(new Intent(this, ChonMonActivity.class));
+        layoutContent = (LinearLayout) findViewById(R.id.listButton);
+        hienThiSoBan();
     }
 
     @Override
@@ -79,7 +161,6 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            openChonMon();
             return true;
         }
 
