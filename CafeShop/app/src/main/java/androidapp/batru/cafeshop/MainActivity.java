@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import database.Database;
+import model.ThucDon;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,17 +50,27 @@ public class MainActivity extends AppCompatActivity
         for (int i = 1; i <= soLuongLayout; i++) {
             LinearLayout horizontalLayout = new LinearLayout(this);
             horizontalLayout.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            while(indexButton <= soLuongButtonTrenDong * indexLayout) {
+            while (indexButton <= soLuongButtonTrenDong * indexLayout) {
+                int idBan = indexButton - 1;
+                Cursor demo = db.getData("SELECT * FROM BanAn WHERE SoBan = " + idBan);
+                if (demo != null) {
+                    demo.moveToFirst();
+                }
                 final Button button = new Button(this);
-                button.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                boolean isConTrong = demo.getString(2).equals("TRUE");
+                if (isConTrong) {
+                    button.setBackgroundResource(R.drawable.button_ban_trong);
+                } else {
+                    button.setBackgroundResource(R.drawable.button_co_khach);
+                }
+                params.setMargins(5, 5, 5, 5);
+                button.setLayoutParams(params);
                 button.setText("Ban " + indexButton);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String tenBan = button.getText().toString();
-                        String soBan = tenBan.replaceAll("[^0-9]", "");
-                        int idBan = Integer.parseInt(soBan) - 1;
-                        Toast.makeText(MainActivity.this, idBan + "", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, ChonMonActivity.class));
                     }
                 });
                 horizontalLayout.addView(button);
@@ -111,6 +123,8 @@ public class MainActivity extends AppCompatActivity
                 "ThoiGian DATETIME DEFAULT CURRENT_TIMESTAMP," +
                 "BanAn INTEGER," +
                 "FOREIGN KEY (BanAn) REFERENCES BanAn(SoBan))");
+
+        db.queryData("UPDATE BanAn SET ConTrong = 'TRUE' WHERE SoBan = 5");
 
     }
 

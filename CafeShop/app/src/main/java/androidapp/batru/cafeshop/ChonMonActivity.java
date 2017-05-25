@@ -5,10 +5,20 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import adapter.ThucDonAdapter;
+import model.ThucDon;
+
 public class ChonMonActivity extends AppCompatActivity {
-        
+
+    private ListView listViewMonAn;
+    private ThucDonAdapter adapter;
+    private ArrayList<ThucDon> ds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +34,15 @@ public class ChonMonActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        listViewMonAn = (ListView) findViewById(R.id.listView);
+        ds = new ArrayList<>();
+        ds.add(new ThucDon("Chim cuc chien bo", 25000, "Cai", "", true));
+        ds.add(new ThucDon("Bao xeo", 2000, "Cai", "", true));
+        ds.add(new ThucDon("Banh mi bo kho", 15000, "Phan", "", true));
+        ds.add(new ThucDon("Cafe sua da", 16000, "Ly", "", true));
+        adapter = new ThucDonAdapter(this, R.layout.chon_mon_item, ds);
+        listViewMonAn.setAdapter(adapter);
     }
     
     @Override

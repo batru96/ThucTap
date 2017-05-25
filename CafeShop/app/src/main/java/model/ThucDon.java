@@ -1,4 +1,4 @@
-package androidapp.batru.cafeshop;
+package model;
 
 /**
  * Created by hoangkhoa on 5/24/17.
