@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="androidapp.batru.cafeshop.ThemThucDonActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Tên món"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editTenMon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:gravity="end"
+                android:hint="Nhập tên món"
+                android:inputType="text"
+                android:textColorHint="#E91E63" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Giá bán"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editGiaBan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:gravity="end"
+                android:hint="Nhập giá bán"
+                android:inputType="number"
+                android:textColorHint="#E91E63" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Đơn vị tính"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editDonVi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:gravity="end"
+                android:hint="Nhập đơn vị tính"
+                android:inputType="number"
+                android:textColorHint="#E91E63" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/xongButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="XONG" />
+    </LinearLayout>
+</RelativeLayout>

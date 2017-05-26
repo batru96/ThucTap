@@ -4,7 +4,7 @@ package model;
  * Created by hoangkhoa on 5/24/17.
  */
 
-public class ThucDon {
+public class MonAn {
     private int id;
     private String ten;
     private long gia;
@@ -12,7 +12,7 @@ public class ThucDon {
     private String hinhAnh;
     private boolean isConHang;
 
-    public ThucDon(int id, String ten, long gia, String donVi, String hinhAnh, boolean isConHang) {
+    public MonAn(int id, String ten, long gia, String donVi, String hinhAnh, boolean isConHang) {
         this.ten = ten;
         this.gia = gia;
         this.donVi = donVi;

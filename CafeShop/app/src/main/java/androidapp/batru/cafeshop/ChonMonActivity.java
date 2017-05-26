@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import adapter.ChonMonAdapter;
-import model.ThucDon;
+import model.MonAn;
 
 import static androidapp.batru.cafeshop.MainActivity.db;
 
@@ -21,7 +21,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
     private ListView listViewMonAn;
     private ChonMonAdapter adapter;
-    private ArrayList<ThucDon> ds;
+    private ArrayList<MonAn> ds;
 
 
     @Override
@@ -53,7 +53,7 @@ public class ChonMonActivity extends AppCompatActivity {
             String donVi = cursor.getString(3);
             int hinhAnh = cursor.getInt(4);
             boolean isConHang = cursor.getString(5).equals("true");
-            ds.add(new ThucDon(id, ten, donGia, donVi, "", isConHang));
+            ds.add(new MonAn(id, ten, donGia, donVi, "", isConHang));
         }
         adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
         listViewMonAn.setAdapter(adapter);

@@ -27,6 +27,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".ThemThucDonActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ThucDonActivity" />
+        </activity>
     </application>
 
 </manifest>

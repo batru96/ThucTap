@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidapp.batru.cafeshop.R;
-import model.ThucDon;
+import model.MonAn;
 
 /**
  * Created by hoangkhoa on 5/26/17.
@@ -22,12 +22,12 @@ public class ThucDonAdapter extends BaseAdapter {
 
     private Context context;
     private int resource;
-    private ArrayList<ThucDon> ds;
+    private ArrayList<MonAn> ds;
 
-    public ThucDonAdapter(Context context, int resource, ArrayList<ThucDon> thucDons) {
+    public ThucDonAdapter(Context context, int resource, ArrayList<MonAn> monen) {
         this.context = context;
         this.resource = resource;
-        this.ds = thucDons;
+        this.ds = monen;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ThucDonAdapter extends BaseAdapter {
         TextView txtNgungBan = (TextView) convertView.findViewById(R.id.textNgungBan);
         ImageButton btnChiTiet = (ImageButton) convertView.findViewById(R.id.chiTietButton);
 
-        ThucDon sanPham = ds.get(position);
+        MonAn sanPham = ds.get(position);
         txtTen.setText(sanPham.getTen());
         txtGia.setText(sanPham.getGia() + "đ");
         if (!sanPham.isConHang()) {

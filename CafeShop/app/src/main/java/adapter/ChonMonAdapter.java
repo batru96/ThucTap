@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidapp.batru.cafeshop.R;
-import model.ThucDon;
+import model.MonAn;
 
 /**
  * Created by hoangkhoa on 5/25/17.
@@ -21,9 +21,9 @@ import model.ThucDon;
 public class ChonMonAdapter extends BaseAdapter {
     private Context context;
     private int resource;
-    private ArrayList<ThucDon> ds;
+    private ArrayList<MonAn> ds;
 
-    public ChonMonAdapter(Context context, int resource, ArrayList<ThucDon> ds) {
+    public ChonMonAdapter(Context context, int resource, ArrayList<MonAn> ds) {
         this.context = context;
         this.resource = resource;
         this.ds = ds;
@@ -57,9 +57,9 @@ public class ChonMonAdapter extends BaseAdapter {
         ImageButton btnCong = (ImageButton) convertView.findViewById(R.id.btnCong);
         final TextView txtSoLuong = (TextView) convertView.findViewById(R.id.soLuong);
 
-        ThucDon thucDon = ds.get(position);
-        txtGia.setText(thucDon.getGia() + "đ");
-        txtTen.setText(thucDon.getTen() + "");
+        MonAn monAn = ds.get(position);
+        txtGia.setText(monAn.getGia() + "đ");
+        txtTen.setText(monAn.getTen() + "");
         btnCong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
