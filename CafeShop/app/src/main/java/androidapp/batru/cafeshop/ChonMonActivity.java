@@ -1,7 +1,9 @@
 package androidapp.batru.cafeshop;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,14 +12,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import adapter.ThucDonAdapter;
+import adapter.ChonMonAdapter;
 import model.ThucDon;
+
+import static androidapp.batru.cafeshop.MainActivity.db;
 
 public class ChonMonActivity extends AppCompatActivity {
 
     private ListView listViewMonAn;
-    private ThucDonAdapter adapter;
+    private ChonMonAdapter adapter;
     private ArrayList<ThucDon> ds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +40,25 @@ public class ChonMonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Intent intent = getIntent();
+        String demo = intent.getStringExtra("id");
+
         listViewMonAn = (ListView) findViewById(R.id.listView);
         ds = new ArrayList<>();
-        ds.add(new ThucDon("Chim cuc chien bo", 25000, "Cai", "", true));
-        ds.add(new ThucDon("Bao xeo", 2000, "Cai", "", true));
-        ds.add(new ThucDon("Banh mi bo kho", 15000, "Phan", "", true));
-        ds.add(new ThucDon("Cafe sua da", 16000, "Ly", "", true));
-        adapter = new ThucDonAdapter(this, R.layout.chon_mon_item, ds);
+        Cursor cursor = db.getData("SELECT * FROM MonAn");
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String ten = cursor.getString(1);
+            int donGia = cursor.getInt(2);
+            String donVi = cursor.getString(3);
+            int hinhAnh = cursor.getInt(4);
+            boolean isConHang = cursor.getString(5).equals("true");
+            ds.add(new ThucDon(id, ten, donGia, donVi, "", isConHang));
+        }
+        adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
         listViewMonAn.setAdapter(adapter);
+
+
     }
     
     @Override

@@ -12,11 +12,12 @@ public class ThucDon {
     private String hinhAnh;
     private boolean isConHang;
 
-    public ThucDon(String ten, long gia, String donVi, String hinhAnh, boolean isConHang) {
+    public ThucDon(int id, String ten, long gia, String donVi, String hinhAnh, boolean isConHang) {
         this.ten = ten;
         this.gia = gia;
         this.donVi = donVi;
         this.hinhAnh = hinhAnh;
+        this.id = id;
         this.isConHang = isConHang;
     }
 

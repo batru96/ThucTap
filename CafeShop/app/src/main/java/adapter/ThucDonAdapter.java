@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,18 +15,19 @@ import androidapp.batru.cafeshop.R;
 import model.ThucDon;
 
 /**
- * Created by hoangkhoa on 5/25/17.
+ * Created by hoangkhoa on 5/26/17.
  */
 
 public class ThucDonAdapter extends BaseAdapter {
+
     private Context context;
     private int resource;
     private ArrayList<ThucDon> ds;
 
-    public ThucDonAdapter(Context context, int resource, ArrayList<ThucDon> ds) {
+    public ThucDonAdapter(Context context, int resource, ArrayList<ThucDon> thucDons) {
         this.context = context;
         this.resource = resource;
-        this.ds = ds;
+        this.ds = thucDons;
     }
 
     @Override
@@ -45,21 +46,27 @@ public class ThucDonAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        convertView = inflater.inflate(resource, null);
-
-        ImageView imageListView = (ImageView) convertView.findViewById(R.id.image_listview);
+        convertView = inflater.inflate(this.resource, null);
         TextView txtTen = (TextView) convertView.findViewById(R.id.ten_item);
         TextView txtGia = (TextView) convertView.findViewById(R.id.gia_item);
-        ImageButton btnTru = (ImageButton) convertView.findViewById(R.id.btnTru);
-        ImageButton btnCong = (ImageButton) convertView.findViewById(R.id.btnCong);
-        TextView txtSoLuong = (TextView) convertView.findViewById(R.id.soLuong);
+        TextView txtNgungBan = (TextView) convertView.findViewById(R.id.textNgungBan);
+        ImageButton btnChiTiet = (ImageButton) convertView.findViewById(R.id.chiTietButton);
 
-        ThucDon thucDon = ds.get(position);
-        txtGia.setText(thucDon.getGia() + "");
-        txtTen.setText(thucDon.getTen() + "");
+        ThucDon sanPham = ds.get(position);
+        txtTen.setText(sanPham.getTen());
+        txtGia.setText(sanPham.getGia() + "đ");
+        if (!sanPham.isConHang()) {
+            txtNgungBan.setVisibility(View.VISIBLE);
+        }
+        btnChiTiet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, position + "", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return convertView;
     }

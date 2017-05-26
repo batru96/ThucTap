@@ -7,12 +7,10 @@ package model;
 public class BanAn {
     private int soBan;
     private int soNguoi;
-    private boolean isTrong;
 
-    public BanAn(int soBan, int soNguoi, boolean isTrong) {
+    public BanAn(int soBan, int soNguoi) {
         this.soBan = soBan;
         this.soNguoi = soNguoi;
-        this.isTrong = isTrong;
     }
 
     public int getSoBan() {
@@ -29,13 +27,5 @@ public class BanAn {
 
     public void setSoNguoi(int soNguoi) {
         this.soNguoi = soNguoi;
-    }
-
-    public boolean isTrong() {
-        return isTrong;
-    }
-
-    public void setTrong(boolean trong) {
-        isTrong = trong;
     }
 }
