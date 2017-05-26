@@ -86,7 +86,7 @@
                 android:background="@null"
                 android:gravity="end"
                 android:hint="Nhập đơn vị tính"
-                android:inputType="number"
+                android:inputType="text"
                 android:textColorHint="#E91E63" />
         </RelativeLayout>
 

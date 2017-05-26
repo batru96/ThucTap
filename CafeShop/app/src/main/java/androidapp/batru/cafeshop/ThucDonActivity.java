@@ -63,8 +63,7 @@ public class ThucDonActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.menu_chon_mon) {
             xuLyThemMon();
         }
-        
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     private void xuLyThemMon() {

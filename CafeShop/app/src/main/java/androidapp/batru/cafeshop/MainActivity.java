@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -217,8 +216,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.nav_ban_hang:
                 xuLyBanHangClicked();
@@ -241,7 +238,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void xuLyThucDonClicked() {
-        startActivity(new Intent(MainActivity.this, ThucDonActivity.class));
+        startActivity(new Intent(this, ThucDonActivity.class));
     }
 
     private void xuLyBanHangClicked() {

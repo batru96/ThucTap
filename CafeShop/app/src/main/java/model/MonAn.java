@@ -21,6 +21,12 @@ public class MonAn {
         this.isConHang = isConHang;
     }
 
+    public MonAn(String ten, long gia, String donVi) {
+        this.ten = ten;
+        this.gia = gia;
+        this.donVi = donVi;
+    }
+
     public int getId() {
         return id;
     }
