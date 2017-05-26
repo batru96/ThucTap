@@ -45,12 +45,6 @@ public class ThemThucDonActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "DESTROY", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onBackPressed() {
         finish();
     }

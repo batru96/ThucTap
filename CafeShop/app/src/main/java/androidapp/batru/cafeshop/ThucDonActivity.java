@@ -36,7 +36,11 @@ public class ThucDonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         lvThucDon = (ListView) findViewById(R.id.listviewThucDon);
-        dsMonAn = new ArrayList<>();
+
+    }
+
+    private ArrayList<MonAn> docDuLieuTuDatabase() {
+        ArrayList<MonAn> dsMonAn = new ArrayList<>();
         Cursor cursor = MainActivity.db.getData("SELECT * FROM MonAn");
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
@@ -46,10 +50,8 @@ public class ThucDonActivity extends AppCompatActivity {
             int hinhAnh = cursor.getInt(4);
             boolean isConBan = cursor.getString(5).equals("true");
             dsMonAn.add(new MonAn(id, ten, donGia, donVi, "", isConBan));
-
         }
-        adapter = new ThucDonAdapter(this, R.layout.item_thuc_don, dsMonAn);
-        lvThucDon.setAdapter(adapter);
+        return dsMonAn;
     }
 
     @Override
@@ -68,5 +70,13 @@ public class ThucDonActivity extends AppCompatActivity {
 
     private void xuLyThemMon() {
         startActivity(new Intent(this, ThemThucDonActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dsMonAn = docDuLieuTuDatabase();
+        adapter = new ThucDonAdapter(this, R.layout.item_thuc_don, dsMonAn);
+        lvThucDon.setAdapter(adapter);
     }
 }
