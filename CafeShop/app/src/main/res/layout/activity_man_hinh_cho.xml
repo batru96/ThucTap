@@ -8,8 +8,8 @@
     android:background="@color/colorPrimary">
 
     <TextView
-        android:textSize="36sp"
-        android:text="Man hinh cho"
+        android:textSize="26sp"
+        android:text="Phần mềm quản lý bán hàng"
         android:textColor="#FFF"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

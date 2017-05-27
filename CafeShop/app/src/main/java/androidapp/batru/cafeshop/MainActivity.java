@@ -134,11 +134,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         layoutContent = (LinearLayout) findViewById(R.id.listButton);
-        //hienThiSoBan();
-        fakeBanAn();
+        hienThiBanAn();
     }
 
-    private void fakeBanAn() {
+    private void hienThiBanAn() {
         ArrayList<BanAn> dsBanAn = new ArrayList<>();
 
         // Doc du lieu tu database, roi hien thi thong tin cac ban an
@@ -149,24 +148,29 @@ public class MainActivity extends AppCompatActivity
             dsBanAn.add(new BanAn(idBanAn, soNguoi));
         }
 
-        int soLuongBanTrenDong = 4;
-        int indexLayout = 1, soLuongLayout = dsBanAn.size() / soLuongBanTrenDong;
-        int indexBanAn = 1;
-        for (int i = 1; i <= soLuongLayout; i++) {
+        int soCot = 4;
+        int soHang = dsBanAn.size() / soCot;
+        if (soCot * soHang < dsBanAn.size())
+            soHang++;
+
+        int idxBanAn = 0;
+        for (int i = 0; i < soHang; i++) {
             LinearLayout horizontal = new LinearLayout(this);
             horizontal.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            while (indexBanAn <= soLuongBanTrenDong * indexLayout) {
+            for (int j = 0; j < soCot && idxBanAn < dsBanAn.size(); j++) {
                 final Button button = new Button(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                boolean isConTrong = dsBanAn.get(indexBanAn - 1).getSoNguoi() == 0;
+                params.setMargins(5, 5, 5, 5);
+                button.setLayoutParams(params);
+                button.setText("Bàn " + (idxBanAn + 1));
+
+                boolean isConTrong = dsBanAn.get(idxBanAn).getSoNguoi() == 0;
                 if (isConTrong) {
                     button.setBackgroundResource(R.drawable.button_ban_trong);
                 } else {
                     button.setBackgroundResource(R.drawable.button_co_khach);
                 }
-                params.setMargins(5, 5, 5, 5);
-                button.setLayoutParams(params);
-                button.setText("Ban " + indexBanAn);
+
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -175,10 +179,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                     }
                 });
+
+                idxBanAn++;
                 horizontal.addView(button);
-                indexBanAn++;
             }
-            indexLayout++;
             layoutContent.addView(horizontal);
         }
     }
@@ -200,17 +204,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
+            themBanAn();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void themBanAn() {
+        db.queryData("INSERT INTO BanAn VALUES (null, 0)");
+        layoutContent.removeAllViews();
+        hienThiBanAn();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

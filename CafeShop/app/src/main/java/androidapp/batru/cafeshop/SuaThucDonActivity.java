@@ -31,7 +31,7 @@ public class SuaThucDonActivity extends AppCompatActivity {
 
     private void initControls() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Thêm món ăn");
+        toolbar.setTitle("Chỉnh sửa thực đơn");
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
