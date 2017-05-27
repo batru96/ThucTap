@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Created by hoangkhoa on 5/24/17.
  */
 
-public class MonAn {
+public class MonAn implements Serializable {
     private int id;
     private String ten;
     private long gia;
@@ -21,12 +23,16 @@ public class MonAn {
         this.isConHang = isConHang;
     }
 
-    public MonAn(String ten, long gia, String donVi) {
+    public MonAn(String ten, long gia, String donVi, boolean isConHang) {
         this.ten = ten;
         this.gia = gia;
         this.donVi = donVi;
+        this.isConHang = isConHang;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }

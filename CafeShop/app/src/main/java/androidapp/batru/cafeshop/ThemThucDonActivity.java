@@ -62,7 +62,7 @@ public class ThemThucDonActivity extends AppCompatActivity {
         if (ten.equals("") || gia == 0 || donVi.equals("")) {
             Toast.makeText(this, "Vui long nhap du lieu day du", Toast.LENGTH_SHORT).show();
         } else {
-            MonAn monAn = new MonAn(ten, gia, donVi);
+            MonAn monAn = new MonAn(ten, gia, donVi, true);
             themMonAn(monAn);
         }
     }

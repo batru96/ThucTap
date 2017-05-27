@@ -40,6 +40,12 @@ public class ThucDonActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         lvThucDon = (ListView) findViewById(R.id.listviewThucDon);
+        lvThucDon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                suaItem(position);
+            }
+        });
         lvThucDon.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -47,6 +53,13 @@ public class ThucDonActivity extends AppCompatActivity{
                 return true;
             }
         });
+    }
+
+    private void suaItem(int position) {
+        Intent intent = new Intent(this, SuaThucDonActivity.class);
+        MonAn monAn = dsMonAn.get(position);
+        intent.putExtra("MONAN", monAn);
+        startActivity(intent);
     }
 
     private void xoaItem(final int position) {
