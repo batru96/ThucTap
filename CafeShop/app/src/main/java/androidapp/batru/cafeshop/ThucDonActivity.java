@@ -1,12 +1,16 @@
 package androidapp.batru.cafeshop;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,7 +18,7 @@ import java.util.ArrayList;
 import adapter.ThucDonAdapter;
 import model.MonAn;
 
-public class ThucDonActivity extends AppCompatActivity {
+public class ThucDonActivity extends AppCompatActivity{
 
     private ListView lvThucDon;
     private ArrayList<MonAn> dsMonAn;
@@ -36,8 +40,37 @@ public class ThucDonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         lvThucDon = (ListView) findViewById(R.id.listviewThucDon);
-
+        lvThucDon.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                xoaItem(position);
+                return true;
+            }
+        });
     }
+
+    private void xoaItem(final int position) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Thông báo");
+        dialog.setMessage("Xác nhận xóa");
+        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MonAn monAn = dsMonAn.get(position);
+                MainActivity.db.queryData("DELETE FROM MonAn WHERE MaMonAn = " + monAn.getId());
+                dsMonAn.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
+    }
+
 
     private ArrayList<MonAn> docDuLieuTuDatabase() {
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
