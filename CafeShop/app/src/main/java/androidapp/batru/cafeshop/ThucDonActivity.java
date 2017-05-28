@@ -93,9 +93,8 @@ public class ThucDonActivity extends AppCompatActivity{
             String ten = cursor.getString(1);
             long donGia = cursor.getLong(2);
             String donVi = cursor.getString(3);
-            int hinhAnh = cursor.getInt(4);
-            boolean isConBan = cursor.getString(5).equals("true");
-            dsMonAn.add(new MonAn(id, ten, donGia, donVi, "", isConBan));
+            boolean isConBan = cursor.getString(4).equals("true");
+            dsMonAn.add(new MonAn(id, ten, donGia, donVi, isConBan));
         }
         return dsMonAn;
     }

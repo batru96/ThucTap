@@ -1,7 +1,6 @@
 package androidapp.batru.cafeshop;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,14 +14,13 @@ import java.util.ArrayList;
 import adapter.ChonMonAdapter;
 import model.MonAn;
 
-import static androidapp.batru.cafeshop.MainActivity.db;
-
 public class ChonMonActivity extends AppCompatActivity {
 
     private ListView listViewMonAn;
     private ChonMonAdapter adapter;
     private ArrayList<MonAn> ds;
 
+    private int idBanAn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +39,30 @@ public class ChonMonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        String demo = intent.getStringExtra("id");
+        idBanAn = intent.getIntExtra("id", -1);
 
         listViewMonAn = (ListView) findViewById(R.id.listView);
         ds = new ArrayList<>();
-        Cursor cursor = db.getData("SELECT * FROM MonAn");
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String ten = cursor.getString(1);
-            int donGia = cursor.getInt(2);
-            String donVi = cursor.getString(3);
-            int hinhAnh = cursor.getInt(4);
-            boolean isConHang = cursor.getString(5).equals("true");
-            ds.add(new MonAn(id, ten, donGia, donVi, "", isConHang));
-        }
+//        Cursor cursor = db.getData("SELECT * FROM MonAn");
+//        while (cursor.moveToNext()) {
+//            int id = cursor.getInt(0);
+//            String ten = cursor.getString(1);
+//            int donGia = cursor.getInt(2);
+//            String donVi = cursor.getString(3);
+//            boolean isConHang = cursor.getString(4).equals("true");
+//            ds.add(new MonAn(id, ten, donGia, donVi, isConHang));
+//        }
         adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
         listViewMonAn.setAdapter(adapter);
-
-
     }
-    
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_chon_mon, menu);
         return true;
     }

@@ -11,14 +11,12 @@ public class MonAn implements Serializable {
     private String ten;
     private long gia;
     private String donVi;
-    private String hinhAnh;
     private boolean isConHang;
 
-    public MonAn(int id, String ten, long gia, String donVi, String hinhAnh, boolean isConHang) {
+    public MonAn(int id, String ten, long gia, String donVi, boolean isConHang) {
         this.ten = ten;
         this.gia = gia;
         this.donVi = donVi;
-        this.hinhAnh = hinhAnh;
         this.id = id;
         this.isConHang = isConHang;
     }
@@ -59,14 +57,6 @@ public class MonAn implements Serializable {
 
     public void setDonVi(String donVi) {
         this.donVi = donVi;
-    }
-
-    public String getHinhAnh() {
-        return hinhAnh;
-    }
-
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
     }
 
     public boolean isConHang() {

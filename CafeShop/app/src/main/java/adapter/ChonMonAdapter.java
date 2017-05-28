@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,7 +49,6 @@ public class ChonMonAdapter extends BaseAdapter {
 
         convertView = inflater.inflate(resource, null);
 
-        ImageView imageListView = (ImageView) convertView.findViewById(R.id.image_listview);
         TextView txtTen = (TextView) convertView.findViewById(R.id.ten_item);
         TextView txtGia = (TextView) convertView.findViewById(R.id.gia_item);
         ImageButton btnTru = (ImageButton) convertView.findViewById(R.id.btnTru);
