@@ -39,15 +39,12 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private LinearLayout layoutContent;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         khoiTaoDatabase();
-
         initControls();
     }
 
