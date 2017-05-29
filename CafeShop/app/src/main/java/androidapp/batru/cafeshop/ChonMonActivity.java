@@ -6,21 +6,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adapter.ChonMonAdapter;
+import model.BanAn;
 import model.MonAn;
 
 public class ChonMonActivity extends AppCompatActivity {
+
+    private final String TAG = "CHONMON_ACTVITY";
 
     private ListView listViewMonAn;
     private ChonMonAdapter adapter;
     private ArrayList<MonAn> ds;
 
-    private int idBanAn;
+    private Button btnHuy;
+    private Button btnCat;
+    private Button btnThuTien;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,12 @@ public class ChonMonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        idBanAn = intent.getIntExtra("id", -1);
+        BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
+        int soKhach = intent.getIntExtra(MainActivity.INTENT_SOKHACH, -1);
+
+        btnHuy = (Button) findViewById(R.id.buttonHuy);
+        btnCat = (Button) findViewById(R.id.buttonCat);
+        btnThuTien = (Button) findViewById(R.id.buttonThuTien);
 
         listViewMonAn = (ListView) findViewById(R.id.listView);
         ds = new ArrayList<>();

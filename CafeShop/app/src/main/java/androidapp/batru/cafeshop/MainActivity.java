@@ -31,12 +31,15 @@ import model.BanAn;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static Database db;
+    public static final String INTENT_BANAN = "BanAn";
+    public static final String INTENT_SOKHACH = "SoKhach";
     private final String TAG = "MainActivity";
 
     private DrawerLayout drawer;
     private LinearLayout layoutContent;
 
-    public static Database db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +108,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         xuLyBanAnClicked(idBanAn);
-
 //                        Intent intent = new Intent(MainActivity.this, ChonMonActivity.class);
 //                        intent.putExtra("id", dsBanAn.get(idBanAn).getSoBan());
 //                        startActivity(intent);
@@ -124,28 +126,36 @@ public class MainActivity extends AppCompatActivity
         cursor.moveToFirst();
         int soBan = cursor.getInt(0);
         int soNguoi = cursor.getInt(1);
-        Intent intent = new Intent(this, ChonMonActivity.class);
-        if (soNguoi == 0) {
-            Toast.makeText(this, "Ban con trong", Toast.LENGTH_SHORT).show();
-            khoiTaoDialog();
+        BanAn banAn = new BanAn(soBan, soNguoi);
 
+        if (soNguoi == 0) {
+            khoiTaoDialog(banAn);
         } else {
             Log.v(TAG, "Ban dang co khach");
         }
-        //startActivity(intent);
     }
 
-    private void khoiTaoDialog() {
+    private void khoiTaoDialog(final BanAn banAn) {
         final Dialog dialogThemBanAn = new Dialog(this);
         dialogThemBanAn.setContentView(R.layout.dialog_them_ban);
-        EditText edtNhapSoNguoi = (EditText) findViewById(R.id.edtNhapSoNguoi);
+        final EditText edtNhapSoNguoi = (EditText) dialogThemBanAn.findViewById(R.id.edtNhapSoNguoi);
         Button btnHuy = (Button) dialogThemBanAn.findViewById(R.id.btnHuy);
         Button btnXacNhan = (Button) dialogThemBanAn.findViewById(R.id.btnXacNhan);
 
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "HELLO THERE", Toast.LENGTH_SHORT).show();
+                int soKhachMoiVao;
+                if (edtNhapSoNguoi.getText().toString().equals("")) {
+                    soKhachMoiVao = 1;
+                } else {
+                    soKhachMoiVao = Integer.parseInt(edtNhapSoNguoi.getText().toString());
+                }
+                Intent intent = new Intent(MainActivity.this, ChonMonActivity.class);
+                intent.putExtra(INTENT_SOKHACH, soKhachMoiVao);
+                intent.putExtra(INTENT_BANAN, banAn);
+                startActivity(intent);
+                //xuLyThemNguoiVaoBanAn(banAn, soKhachMoiVao);
             }
         });
         btnHuy.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +165,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
         dialogThemBanAn.show();
+    }
+
+    private void xuLyThemNguoiVaoBanAn(BanAn banAn, int soKhachMoiVao) {
+        db.queryData("UPDATE BanAn SET SoNguoi = " + soKhachMoiVao + " WHERE SoBan = " + banAn.getSoNguoi());
+        db.queryData("INSERT INTO HoaDon VALUES");
     }
 
     @Override
@@ -176,13 +191,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            themBanAn();
-            return true;
+            taoBanAn();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void themBanAn() {
+    private void taoBanAn() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Thông báo");
         dialog.setMessage("Thêm bàn ăn mới?");

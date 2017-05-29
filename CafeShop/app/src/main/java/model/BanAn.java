@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Created by hoangkhoa on 5/24/17.
  */
 
-public class BanAn {
+public class BanAn implements Serializable{
     private int soBan;
     private int soNguoi;
 
@@ -27,5 +29,10 @@ public class BanAn {
 
     public void setSoNguoi(int soNguoi) {
         this.soNguoi = soNguoi;
+    }
+
+    @Override
+    public String toString() {
+        return "SoBan: " + this.soBan + " -- SoNguoi: " + this.soNguoi;
     }
 }
