@@ -24,13 +24,34 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@color/fbutton_color_transparent"
-            android:src="@drawable/ic_close"
-            android:contentDescription="null" />
+            android:contentDescription="null"
+            android:src="@drawable/ic_close" />
     </RelativeLayout>
 
-    <TableLayout
+    <EditText
+        android:inputType="number"
+        android:id="@+id/edtNhapSoNguoi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </TableLayout>
+        <Button
+            android:id="@+id/btnHuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Huy" />
+
+        <Button
+            android:id="@+id/btnXacNhan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Xac nhan" />
+    </RelativeLayout>
+
 </LinearLayout>

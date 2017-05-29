@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -125,11 +127,34 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, ChonMonActivity.class);
         if (soNguoi == 0) {
             Toast.makeText(this, "Ban con trong", Toast.LENGTH_SHORT).show();
+            khoiTaoDialog();
 
         } else {
             Log.v(TAG, "Ban dang co khach");
         }
-        startActivity(intent);
+        //startActivity(intent);
+    }
+
+    private void khoiTaoDialog() {
+        final Dialog dialogThemBanAn = new Dialog(this);
+        dialogThemBanAn.setContentView(R.layout.dialog_them_ban);
+        EditText edtNhapSoNguoi = (EditText) findViewById(R.id.edtNhapSoNguoi);
+        Button btnHuy = (Button) dialogThemBanAn.findViewById(R.id.btnHuy);
+        Button btnXacNhan = (Button) dialogThemBanAn.findViewById(R.id.btnXacNhan);
+
+        btnXacNhan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "HELLO THERE", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnHuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogThemBanAn.dismiss();
+            }
+        });
+        dialogThemBanAn.show();
     }
 
     @Override
