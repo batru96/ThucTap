@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity
 
     private void xuLyThemNguoiVaoBanAn(BanAn banAn, int soKhachMoiVao) {
         db.queryData("UPDATE BanAn SET SoNguoi = " + soKhachMoiVao + " WHERE SoBan = " + banAn.getSoNguoi());
-        db.queryData("INSERT INTO HoaDon VALUES");
     }
 
     @Override
@@ -266,7 +265,8 @@ public class MainActivity extends AppCompatActivity
                 "TenMonAn VARCHAR,\n" +
                 "DonGia INTEGER,\n" +
                 "DonViTinh VARCHAR,\n" +
-                "ConHang BOOL\n" +
+                "ConHang BOOL,\n" +
+                "HinhAnh VARCHAR" +
                 ");");
 
         db.queryData("CREATE TABLE IF NOT EXISTS HoaDon\n" +
@@ -274,6 +274,7 @@ public class MainActivity extends AppCompatActivity
                 "MaHoaDon INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "MaNV INTEGER,\n" +
                 "MaBanAn INTEGER,\n" +
+                "DaThanhToan BOOL,\n" +
                 "ThoiGian DATETIME DEFAULT CURRENT_TIME,\n" +
                 "FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNhanVien),\n" +
                 "FOREIGN KEY (MaBanAn) REFERENCES BanAn(SoBan)\n" +
@@ -292,14 +293,15 @@ public class MainActivity extends AppCompatActivity
         //Toast.makeText(this, "Khoi tao database thanh cong!", Toast.LENGTH_SHORT).show();
         //themDuLieuBanAn();
         //themDuLieuNhanVien();
-        //themMonAn();
+        themMonAn();
     }
 
     private void themMonAn() {
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Chim cúc chiên bơ', 25000, 'Con', 'true');");
+        db.queryData("INSERT INTO MonAn VALUES (null, 'Chim cúc chiên bơ', 25000, 'Con', 'true', '');");
+        /*
         db.queryData("INSERT INTO MonAn VALUES (null, 'Thịt bò khô', 15000, 'Phần', 'true');");
         db.queryData("INSERT INTO MonAn VALUES (null, 'Gà hầm thuốc bắc', 275000, 'Con', 'true')");
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Gòi gà', 30000, 'Phần', 'true')");
+        db.queryData("INSERT INTO MonAn VALUES (null, 'Gòi gà', 30000, 'Phần', 'true')");*/
         Toast.makeText(this, "Them MONAN thanh cong", Toast.LENGTH_SHORT).show();
     }
 
