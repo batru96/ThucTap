@@ -63,7 +63,7 @@ public class ThucDonAdapter extends BaseAdapter {
         txtTen.setText(sanPham.getTen());
         txtGia.setText(sanPham.getGia() + "đ");
         if (!sanPham.isConHang()) {
-            txtNgungBan.setVisibility(View.INVISIBLE);
+            txtNgungBan.setVisibility(View.VISIBLE);
         }
         btnChiTiet.setOnClickListener(new View.OnClickListener() {
             @Override
