@@ -223,6 +223,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_thuc_don:
                 xuLyThucDonClicked();
                 break;
+            case R.id.nav_nhan_vien:
+                xuLyNhanVienClicked();
+                break;
             case R.id.nav_thong_ke:
                 break;
             case R.id.nav_thong_bao:
@@ -237,12 +240,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //region myfunction
+    private void xuLyNhanVienClicked() {
+        startActivity(new Intent(this, NhanVienActivity.class));
+    }
+
     private void xuLyThucDonClicked() {
         startActivity(new Intent(this, ThucDonActivity.class));
     }
 
     private void xuLyBanHangClicked() {
     }
+    //endregion
+    
+    //region Database
 
     private void khoiTaoDatabase() {
         db = new Database(this, "banhang.sqlite", null, 1);
@@ -322,4 +333,5 @@ public class MainActivity extends AppCompatActivity
         db.queryData("INSERT INTO BanAn VALUES (null, 0);");
         Toast.makeText(this, "Them du lieu thanh cong", Toast.LENGTH_SHORT).show();
     }
+    //endregion
 }
