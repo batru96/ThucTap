@@ -1,19 +1,34 @@
 package androidapp.batru.cafeshop;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import model.MonAn;
 
 public class ThemThucDonActivity extends AppCompatActivity {
 
+    private final String TAG = "ThemThucDonActivity";
+    private final int REQUEST_CAMERA_CODE = 111;
+    private final int REQUEST_GALARY_CODE = 112;
+
     private EditText edtTen, edtGia, edtDonVi;
     private Button btnXacNhan;
+    private ImageView imgHinhAnh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +51,60 @@ public class ThemThucDonActivity extends AppCompatActivity {
         edtDonVi = (EditText) findViewById(R.id.editDonVi);
         btnXacNhan = (Button) findViewById(R.id.xongButton);
 
+        imgHinhAnh = (ImageView) findViewById(R.id.imageMonAn);
+
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 xuLyClicked();
             }
         });
+
+        imgHinhAnh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickHinhAnh();
+            }
+        });
+
+        imgHinhAnh.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                longLickHinhAnh();
+                return true;
+            }
+        });
+    }
+
+    private void clickHinhAnh() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_GALARY_CODE);
+    }
+
+    private void longLickHinhAnh() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA_CODE) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imgHinhAnh.setImageBitmap(bitmap);
+            } else if (requestCode == REQUEST_GALARY_CODE) {
+                try {
+                    Uri uri = data.getData();
+                    InputStream is = getContentResolver().openInputStream(uri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+                    imgHinhAnh.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Log.d(TAG, "Pick Image failed");
+                }
+            }
+        }
     }
 
     @Override
@@ -68,7 +131,7 @@ public class ThemThucDonActivity extends AppCompatActivity {
     }
 
     private void themMonAn(MonAn monAn) {
-        MainActivity.db.queryData("INSERT INTO MonAn VALUES (null, '" + monAn.getTen() + "', " 
+        MainActivity.db.queryData("INSERT INTO MonAn VALUES (null, '" + monAn.getTen() + "', "
                 + monAn.getGia() + ", '" + monAn.getDonVi() + "', null, 'true');");
         Toast.makeText(this, "Thanh Cong", Toast.LENGTH_SHORT).show();
     }

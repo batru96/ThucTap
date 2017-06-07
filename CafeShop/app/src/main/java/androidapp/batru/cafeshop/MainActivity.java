@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity
         //Toast.makeText(this, "Khoi tao database thanh cong!", Toast.LENGTH_SHORT).show();
         //themDuLieuBanAn();
         //themDuLieuNhanVien();
-        themMonAn();
+        //themMonAn();
     }
 
     private void themMonAn() {
