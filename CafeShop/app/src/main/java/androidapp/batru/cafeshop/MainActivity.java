@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                 "DonGia INTEGER,\n" +
                 "DonViTinh VARCHAR,\n" +
                 "ConHang BOOL,\n" +
-                "HinhAnh VARCHAR" +
+                "HinhAnh BLOB" +
                 ");");
 
         db.queryData("CREATE TABLE IF NOT EXISTS HoaDon\n" +
@@ -298,10 +298,9 @@ public class MainActivity extends AppCompatActivity
 
     private void themMonAn() {
         db.queryData("INSERT INTO MonAn VALUES (null, 'Chim cúc chiên bơ', 25000, 'Con', 'true', '');");
-        /*
         db.queryData("INSERT INTO MonAn VALUES (null, 'Thịt bò khô', 15000, 'Phần', 'true');");
         db.queryData("INSERT INTO MonAn VALUES (null, 'Gà hầm thuốc bắc', 275000, 'Con', 'true')");
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Gòi gà', 30000, 'Phần', 'true')");*/
+        db.queryData("INSERT INTO MonAn VALUES (null, 'Gòi gà', 30000, 'Phần', 'true')");
         Toast.makeText(this, "Them MONAN thanh cong", Toast.LENGTH_SHORT).show();
     }
 

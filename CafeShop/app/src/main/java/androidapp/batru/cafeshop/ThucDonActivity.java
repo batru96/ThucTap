@@ -89,12 +89,27 @@ public class ThucDonActivity extends AppCompatActivity{
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         Cursor cursor = MainActivity.db.getData("SELECT * FROM MonAn");
         while (cursor.moveToNext()) {
+            MonAn monAn = new MonAn();
+
             int id = cursor.getInt(0);
+            monAn.setId(id);
+
             String ten = cursor.getString(1);
+            monAn.setTen(ten);
+
             long donGia = cursor.getLong(2);
+            monAn.setGia(donGia);
+
             String donVi = cursor.getString(3);
-            boolean isConBan = cursor.getString(4).equals("true");
-            dsMonAn.add(new MonAn(id, ten, donGia, donVi, isConBan));
+            monAn.setDonVi(donVi);
+
+            boolean isConBan = cursor.getString(4).equals("1");
+            monAn.setConHang(isConBan);
+
+            byte[] hinhAnh = cursor.getBlob(5);
+            monAn.setHinhAnh(hinhAnh);
+
+            dsMonAn.add(monAn);
         }
         return dsMonAn;
     }

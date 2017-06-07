@@ -1,11 +1,14 @@
 package adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,12 +57,13 @@ public class ThucDonAdapter extends BaseAdapter {
         TextView txtGia = (TextView) convertView.findViewById(R.id.gia_item);
         TextView txtNgungBan = (TextView) convertView.findViewById(R.id.textNgungBan);
         ImageButton btnChiTiet = (ImageButton) convertView.findViewById(R.id.chiTietButton);
+        ImageView imgHinhAnh = (ImageView) convertView.findViewById(R.id.image_listview);
 
         MonAn sanPham = ds.get(position);
         txtTen.setText(sanPham.getTen());
         txtGia.setText(sanPham.getGia() + "đ");
         if (!sanPham.isConHang()) {
-            txtNgungBan.setVisibility(View.VISIBLE);
+            txtNgungBan.setVisibility(View.INVISIBLE);
         }
         btnChiTiet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +71,11 @@ public class ThucDonAdapter extends BaseAdapter {
                 Toast.makeText(context, position + "", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (sanPham.getHinhAnh() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(sanPham.getHinhAnh(), 0, sanPham.getHinhAnh().length);
+            imgHinhAnh.setImageBitmap(bitmap);
+        }
 
         return convertView;
     }

@@ -1,8 +1,11 @@
 package androidapp.batru.cafeshop;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -90,20 +94,22 @@ public class ThemThucDonActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = null;
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA_CODE) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imgHinhAnh.setImageBitmap(bitmap);
+                bitmap = (Bitmap) data.getExtras().get("data");
             } else if (requestCode == REQUEST_GALARY_CODE) {
                 try {
                     Uri uri = data.getData();
                     InputStream is = getContentResolver().openInputStream(uri);
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    imgHinhAnh.setImageBitmap(bitmap);
+                    bitmap = BitmapFactory.decodeStream(is);
                 } catch (FileNotFoundException e) {
                     Log.d(TAG, "Pick Image failed");
                 }
             }
+        }
+        if (bitmap != null) {
+            imgHinhAnh.setImageBitmap(bitmap);
         }
     }
 
@@ -125,14 +131,37 @@ public class ThemThucDonActivity extends AppCompatActivity {
         if (ten.equals("") || gia == 0 || donVi.equals("")) {
             Toast.makeText(this, "Vui long nhap du lieu day du", Toast.LENGTH_SHORT).show();
         } else {
-            MonAn monAn = new MonAn(ten, gia, donVi, true);
+
+            byte[] anh = getByteArrayForImageView(imgHinhAnh);
+            MonAn monAn = new MonAn(ten, gia, donVi, true, anh);
+
             themMonAn(monAn);
         }
     }
 
+    private byte[] getByteArrayForImageView(ImageView image) {
+        BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
+        if (drawable == null)
+            return null;
+        Bitmap bitmap = drawable.getBitmap();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
     private void themMonAn(MonAn monAn) {
-        MainActivity.db.queryData("INSERT INTO MonAn VALUES (null, '" + monAn.getTen() + "', "
-                + monAn.getGia() + ", '" + monAn.getDonVi() + "', null, 'true');");
+        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("TenMonAn", monAn.getTen());
+        values.put("DonGia", monAn.getGia());
+        values.put("DonViTinh", monAn.getDonVi());
+        values.put("ConHang", monAn.isConHang());
+        values.put("HinhAnh", monAn.getHinhAnh());
+
+        database.insert("MonAn", null, values);
+
         Toast.makeText(this, "Thanh Cong", Toast.LENGTH_SHORT).show();
     }
 }

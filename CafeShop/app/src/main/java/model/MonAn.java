@@ -12,6 +12,11 @@ public class MonAn implements Serializable {
     private long gia;
     private String donVi;
     private boolean isConHang;
+    private byte[] hinhAnh;
+
+    public MonAn() {
+
+    }
 
     public MonAn(int id, String ten, long gia, String donVi, boolean isConHang) {
         this.ten = ten;
@@ -21,11 +26,12 @@ public class MonAn implements Serializable {
         this.isConHang = isConHang;
     }
 
-    public MonAn(String ten, long gia, String donVi, boolean isConHang) {
+    public MonAn(String ten, long gia, String donVi, boolean isConHang, byte[] hinhAnh) {
         this.ten = ten;
         this.gia = gia;
         this.donVi = donVi;
         this.isConHang = isConHang;
+        this.hinhAnh = hinhAnh;
     }
 
     public void setId(int id) {
@@ -65,5 +71,13 @@ public class MonAn implements Serializable {
 
     public void setConHang(boolean conHang) {
         isConHang = conHang;
+    }
+
+    public byte[] getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(byte[] hinhAnh) {
+        this.hinhAnh = hinhAnh;
     }
 }
