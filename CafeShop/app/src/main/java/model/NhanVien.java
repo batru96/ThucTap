@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  * Created by hoangkhoa on 6/7/17.
@@ -10,16 +9,17 @@ import java.sql.Date;
 public class NhanVien implements Serializable {
     private int maNv;
     private String tenNhanVien;
-    private Date ngayLamViec;
+    private String ngayLamViec;
+    private byte[] hinhAnh;
 
     public NhanVien() {
-
     }
 
-    public NhanVien(int maNv, String tenNhanVien, Date ngayLamViec) {
+    public NhanVien(int maNv, String tenNhanVien, String ngayLamViec, byte[] hinhAnh) {
         this.maNv = maNv;
         this.tenNhanVien = tenNhanVien;
         this.ngayLamViec = ngayLamViec;
+        this.hinhAnh = hinhAnh;
     }
 
     public int getMaNv() {
@@ -38,11 +38,19 @@ public class NhanVien implements Serializable {
         this.tenNhanVien = tenNhanVien;
     }
 
-    public Date getNgayLamViec() {
+    public String getNgayLamViec() {
         return ngayLamViec;
     }
 
-    public void setNgayLamViec(Date ngayLamViec) {
+    public void setNgayLamViec(String ngayLamViec) {
         this.ngayLamViec = ngayLamViec;
+    }
+
+    public byte[] getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(byte[] hinhAnh) {
+        this.hinhAnh = hinhAnh;
     }
 }

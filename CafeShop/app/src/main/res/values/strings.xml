@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CafeShop</string>
+    <string name="app_name">Quản lý bán hàng</string>
     <string name="menu_them">Them</string>
     <string name="close">Close Drawer</string>
     <string name="open">Open Drawer</string>

@@ -261,7 +261,8 @@ public class MainActivity extends AppCompatActivity
                 "(\n" +
                 "MaNhanVien INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "TenNhanVien VARCHAR,\n" +
-                "NgayLamViec DATETIME DEFAULT CURRENT_DATE\n" +
+                "NgayLamViec DATETIME DEFAULT CURRENT_DATE,\n" +
+                "HinhAnh BLOB\n" +
                 ");\n");
 
         db.queryData("CREATE TABLE IF NOT EXISTS BanAn\n" +
@@ -301,25 +302,7 @@ public class MainActivity extends AppCompatActivity
                 "FOREIGN KEY (MaMonAn) REFERENCES MonAn(MaMonAn)\n" +
                 ")");
 
-        //Toast.makeText(this, "Khoi tao database thanh cong!", Toast.LENGTH_SHORT).show();
         //themDuLieuBanAn();
-        //themDuLieuNhanVien();
-        //themMonAn();
-    }
-
-    private void themMonAn() {
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Chim cúc chiên bơ', 25000, 'Con', 'true', '');");
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Thịt bò khô', 15000, 'Phần', 'true');");
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Gà hầm thuốc bắc', 275000, 'Con', 'true')");
-        db.queryData("INSERT INTO MonAn VALUES (null, 'Gòi gà', 30000, 'Phần', 'true')");
-        Toast.makeText(this, "Them MONAN thanh cong", Toast.LENGTH_SHORT).show();
-    }
-
-    private void themDuLieuNhanVien() {
-        db.queryData("INSERT INTO NhanVien VALUES (null, 'Cristiano Ronaldo', null);");
-        db.queryData("INSERT INTO NhanVien VALUES (null, 'Son Tung MTP', null);");
-        db.queryData("INSERT INTO NhanVien VALUES (null, 'My Tam', null);");
-        Toast.makeText(this, "Them NHANVIEN thanh cong", Toast.LENGTH_SHORT).show();
     }
 
     private void themDuLieuBanAn() {

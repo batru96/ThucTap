@@ -1,24 +1,31 @@
 package adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidapp.batru.cafeshop.R;
 import model.NhanVien;
-
-/**
- * Created by hoangkhoa on 6/7/17.
- */
 
 public class NhanVienAdapter extends BaseAdapter {
 
     private Context context;
     private int resource;
     private ArrayList<NhanVien> ds;
+
+    public NhanVienAdapter(Context context, int resource, ArrayList<NhanVien> ds) {
+        this.context = context;
+        this.resource = resource;
+        this.ds = ds;
+    }
 
     @Override
     public int getCount() {
@@ -40,6 +47,19 @@ public class NhanVienAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         convertView = inflater.inflate(this.resource, null);
+        ImageView imgHinhAnh = (ImageView) convertView.findViewById(R.id.imageNhanVien);
+        TextView txtTen = (TextView) convertView.findViewById(R.id.nhanVienTenText);
+        TextView txtNgayLam = (TextView) convertView.findViewById(R.id.nhanVienDateText);
+
+        NhanVien nhanVien = ds.get(position);
+        if (nhanVien != null) {
+            txtTen.setText(nhanVien.getTenNhanVien());
+            txtNgayLam.setText("Ngay lam viec: " + nhanVien.getNgayLamViec().toString());
+            if (nhanVien.getHinhAnh() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(nhanVien.getHinhAnh(), 0, nhanVien.getHinhAnh().length);
+                imgHinhAnh.setImageBitmap(bitmap);
+            }
+        }
 
         return convertView;
     }
