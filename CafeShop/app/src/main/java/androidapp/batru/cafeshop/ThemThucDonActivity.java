@@ -138,7 +138,6 @@ public class ThemThucDonActivity extends AppCompatActivity {
             themMonAn(monAn);
         }
     }
-
     private byte[] getByteArrayForImageView(ImageView image) {
         BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
         if (drawable == null)

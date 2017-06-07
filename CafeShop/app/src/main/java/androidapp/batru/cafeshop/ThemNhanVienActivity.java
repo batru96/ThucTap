@@ -1,7 +1,9 @@
 package androidapp.batru.cafeshop;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,6 +24,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import singleton.Singleton;
+
 public class ThemNhanVienActivity extends AppCompatActivity {
 
     private final int REQUEST_CAMERA_CODE = 112;
@@ -32,8 +36,6 @@ public class ThemNhanVienActivity extends AppCompatActivity {
     private EditText edtTen;
     private TextView txtNgayLamViec;
     private Button btnChonNgayLam, btnXong;
-
-
 
     SimpleDateFormat formater;
 
@@ -57,7 +59,7 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         btnXong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ThemNhanVienActivity.this, NhanVienActivity.class));
+                xuLyXongClicked();
             }
         });
 
@@ -75,6 +77,20 @@ public class ThemNhanVienActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void xuLyXongClicked() {
+        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("TenNhanVien", edtTen.getText().toString());
+        values.put("NgayLamViec", edtTen.getText().toString());
+
+        byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgNhanVien);
+        if (hinhAnh!= null){
+            values.put("HinhAnh", hinhAnh);
+        }
+        database.insert("NhanVien", null, values);
     }
 
     private void longClickHinhAnh() {
