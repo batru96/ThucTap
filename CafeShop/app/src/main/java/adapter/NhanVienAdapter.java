@@ -54,7 +54,7 @@ public class NhanVienAdapter extends BaseAdapter {
         NhanVien nhanVien = ds.get(position);
         if (nhanVien != null) {
             txtTen.setText(nhanVien.getTenNhanVien());
-            txtNgayLam.setText("Ngay lam viec: " + nhanVien.getNgayLamViec().toString());
+            txtNgayLam.setText("Ngày làm việc: " + nhanVien.getNgayLamViec());
             if (nhanVien.getHinhAnh() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(nhanVien.getHinhAnh(), 0, nhanVien.getHinhAnh().length);
                 imgHinhAnh.setImageBitmap(bitmap);
