@@ -55,6 +55,21 @@ public class NhanVienActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        lvNhanVien.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                suaItem(position);
+            }
+        });
+    }
+
+    private void suaItem(int position) {
+        Intent intent = new Intent(this, QuanLyNhanVienActivity.class);
+        NhanVien nv = ds.get(position);
+        intent.putExtra("NhanVien", nv);
+        intent.putExtra("FROM", "Sua");
+        startActivity(intent);
     }
 
     private void xoaItem(final int position) {
@@ -111,7 +126,11 @@ public class NhanVienActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add) {
-            startActivity(new Intent(this, ThemNhanVienActivity.class));
+            Intent intent = new Intent(this, QuanLyNhanVienActivity.class);
+
+            intent.putExtra("FROM", "Them");
+
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -42,7 +42,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ThemNhanVienActivity">
+        <activity android:name=".QuanLyNhanVienActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NhanVienActivity" />

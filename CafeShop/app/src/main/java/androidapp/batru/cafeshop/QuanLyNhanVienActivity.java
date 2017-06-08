@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,30 +21,39 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import model.NhanVien;
 import singleton.Singleton;
 
-public class ThemNhanVienActivity extends AppCompatActivity {
+public class QuanLyNhanVienActivity extends AppCompatActivity {
 
+    //region properties
     private final int REQUEST_CAMERA_CODE = 112;
     private final int REQUEST_GALARY_CODE = 113;
-    private final String TAG = "ThemNhanVienActivity";
+    private final String TAG = "QuanLyNhanVienActivity";
 
     private ImageView imgNhanVien;
     private EditText edtTen;
-    private TextView txtNgayLamViec;
+    private TextView txtNgayLamViec, txtTitle;
     private Button btnChonNgayLam, btnXong;
 
     SimpleDateFormat formater;
 
+    private Intent intent;
+    private String nhiemVu;
+    private int maNhanVienFromIntent;
+
+    //endregion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_them_nhan_vien);
+        setContentView(R.layout.activity_quan_ly_nhan_vien);
 
         initControls();
         ganEvents();
@@ -59,7 +70,7 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         btnXong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xuLyXongClicked();
+                xuLyButtonXongClicked();
             }
         });
 
@@ -79,11 +90,7 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         });
     }
 
-    private void chuyenVeParentActivity() {
-        startActivity(new Intent(this, NhanVienActivity.class));
-    }
-
-    private void xuLyXongClicked() {
+    private void xuLyButtonXongClicked() {
         SQLiteDatabase database = MainActivity.db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -91,11 +98,26 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         values.put("NgayLamViec", txtNgayLamViec.getText().toString());
 
         byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgNhanVien);
-        if (hinhAnh!= null){
-            values.put("HinhAnh", hinhAnh);
+        // Tao bytearray tu image profile mac dinh
+        if (hinhAnh == null) {
+            Drawable drawable = getResources().getDrawable(R.drawable.profile);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            hinhAnh = stream.toByteArray();
         }
-        database.insert("NhanVien", null, values);
+        values.put("HinhAnh", hinhAnh);
+
+        if (nhiemVu.equals("Them")) {
+            database.insert("NhanVien", null, values);
+        } else if (nhiemVu.equals("Sua")) {
+            database.update("NhanVien", values, "MaNhanVien = " + maNhanVienFromIntent, null);
+        }
         chuyenVeParentActivity();
+    }
+
+    private void chuyenVeParentActivity() {
+        startActivity(new Intent(this, NhanVienActivity.class));
     }
 
     private void longClickHinhAnh() {
@@ -126,6 +148,8 @@ public class ThemNhanVienActivity extends AppCompatActivity {
     }
 
     private void initControls() {
+        intent = getIntent();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Quản lý nhân viên");
         setSupportActionBar(toolbar);
@@ -136,12 +160,28 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         imgNhanVien = (ImageView) findViewById(R.id.imageNhanVien);
         edtTen = (EditText) findViewById(R.id.editTenNhanVien);
         txtNgayLamViec = (TextView) findViewById(R.id.ngayLamViecText);
+        txtTitle = (TextView) findViewById(R.id.textTitle);
         btnChonNgayLam = (Button) findViewById(R.id.buttonNgayLam);
         btnXong = (Button) findViewById(R.id.buttonXong);
 
         formater = new SimpleDateFormat("dd/MM/yyyy");
 
-        txtNgayLamViec.setText(formater.format(Calendar.getInstance().getTime()));
+        nhiemVu = intent.getStringExtra("FROM");
+
+        if (nhiemVu.equals("Sua")) {
+            NhanVien nv = (NhanVien) intent.getSerializableExtra("NhanVien");
+            edtTen.setText(nv.getTenNhanVien());
+            txtNgayLamViec.setText(nv.getNgayLamViec());
+            txtTitle.setText("Cập nhật thông tin");
+            maNhanVienFromIntent = nv.getMaNv();
+
+            Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(nv.getHinhAnh());
+            imgNhanVien.setImageBitmap(bitmap);
+
+        } else if (nhiemVu.equals("Them")) {
+            txtTitle.setText("Thêm nhân viên");
+            txtNgayLamViec.setText(formater.format(Calendar.getInstance().getTime()));
+        }
     }
 
     @Override

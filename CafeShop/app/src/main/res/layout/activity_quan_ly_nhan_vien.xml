@@ -4,11 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.batru.cafeshop.ThemNhanVienActivity">
+    tools:context="androidapp.batru.cafeshop.QuanLyNhanVienActivity">
 
     <include
         android:id="@id/toolbar"
         layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        tools:text="Them nhan vien" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +58,6 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:textColor="#E91E63"
                 android:id="@+id/editTenNhanVien"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,6 +66,7 @@
                 android:gravity="end"
                 android:hint="Nhập tên nhân viên"
                 android:inputType="text"
+                android:textColor="#E91E63"
                 android:textColorHint="#E91E63" />
         </RelativeLayout>
 
