@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/imageNhanVien"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:contentDescription="@string/load_failed"
         android:scaleType="fitXY"
-        tools:background="#E8E8E8"
-        tools:src="@drawable/profile" />
+        android:src="@drawable/profile"
+        tools:background="#E8E8E8" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,14 +26,15 @@
             android:id="@+id/nhanVienTenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             tools:text="Cristiano Ronaldo" />
 
         <TextView
             android:id="@+id/nhanVienDateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:gravity="center"
+            android:textSize="16sp"
             tools:text="Ngay lam viec: 20/5/2016" />
     </LinearLayout>
 </LinearLayout>

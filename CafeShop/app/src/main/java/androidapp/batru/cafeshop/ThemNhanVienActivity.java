@@ -79,18 +79,23 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         });
     }
 
+    private void chuyenVeParentActivity() {
+        startActivity(new Intent(this, NhanVienActivity.class));
+    }
+
     private void xuLyXongClicked() {
         SQLiteDatabase database = MainActivity.db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("TenNhanVien", edtTen.getText().toString());
-        values.put("NgayLamViec", edtTen.getText().toString());
+        values.put("NgayLamViec", txtNgayLamViec.getText().toString());
 
         byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgNhanVien);
         if (hinhAnh!= null){
             values.put("HinhAnh", hinhAnh);
         }
         database.insert("NhanVien", null, values);
+        chuyenVeParentActivity();
     }
 
     private void longClickHinhAnh() {
@@ -159,5 +164,10 @@ public class ThemNhanVienActivity extends AppCompatActivity {
         if (bitmap != null) {
             imgNhanVien.setImageBitmap(bitmap);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        chuyenVeParentActivity();
     }
 }

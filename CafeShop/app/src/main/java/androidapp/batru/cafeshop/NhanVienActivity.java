@@ -1,25 +1,30 @@
 package androidapp.batru.cafeshop;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import adapter.NhanVienAdapter;
 import model.NhanVien;
 
 public class NhanVienActivity extends AppCompatActivity {
 
+    //region properties
     private ListView lvNhanVien;
     private ArrayList<NhanVien> ds;
     private NhanVienAdapter adapter;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +44,62 @@ public class NhanVienActivity extends AppCompatActivity {
 
         lvNhanVien = (ListView) findViewById(R.id.nhanVienListView);
         ds = new ArrayList<>();
-
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-        String thoiGian = formater.format(Calendar.getInstance().getTime());
-
-        ds.add(new NhanVien(0, "Cristiano Ronaldo", thoiGian, null));
-        ds.add(new NhanVien(1, "Leonel Messi", thoiGian, null));
-        ds.add(new NhanVien(2, "Zalatan Ibrahimovic", thoiGian, null));
-        ds.add(new NhanVien(3, "Wayne Rooney", thoiGian, null));
-
+        ds = docDuLieuTuDatabase();
         adapter = new NhanVienAdapter(this, R.layout.item_nhan_vien, ds);
         lvNhanVien.setAdapter(adapter);
+
+        lvNhanVien.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                xoaItem(position);
+                return true;
+            }
+        });
+    }
+
+    private void xoaItem(final int position) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Thông báo");
+        dialog.setMessage("Xác nhận xóa");
+        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                NhanVien nhanvien = ds.get(position);
+                MainActivity.db.queryData("DELETE FROM NhanVien WHERE MaNhanVien = " + nhanvien.getMaNv());
+                ds.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    private ArrayList<NhanVien> docDuLieuTuDatabase() {
+        ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
+        Cursor cursor = MainActivity.db.getData("SELECT * FROM NhanVien");
+        while (cursor.moveToNext()) {
+            NhanVien nv = new NhanVien();
+
+            int id = cursor.getInt(0);
+            nv.setMaNv(id);
+
+            String ten = cursor.getString(1);
+            nv.setTenNhanVien(ten);
+
+            String ngayLamViec = cursor.getString(2);
+            nv.setNgayLamViec(ngayLamViec);
+
+            byte[] hinhAnh = cursor.getBlob(3);
+            nv.setHinhAnh(hinhAnh);
+
+            dsNhanVien.add(nv);
+        }
+        return dsNhanVien;
     }
 
     @Override
@@ -64,5 +114,10 @@ public class NhanVienActivity extends AppCompatActivity {
             startActivity(new Intent(this, ThemNhanVienActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
