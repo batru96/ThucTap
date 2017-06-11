@@ -18,14 +18,6 @@ public class MonAn implements Serializable {
 
     }
 
-    public MonAn(int id, String ten, long gia, String donVi, boolean isConHang) {
-        this.ten = ten;
-        this.gia = gia;
-        this.donVi = donVi;
-        this.id = id;
-        this.isConHang = isConHang;
-    }
-
     public MonAn(String ten, long gia, String donVi, boolean isConHang, byte[] hinhAnh) {
         this.ten = ten;
         this.gia = gia;

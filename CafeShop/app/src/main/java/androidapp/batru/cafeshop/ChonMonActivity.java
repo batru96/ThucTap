@@ -80,23 +80,32 @@ public class ChonMonActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
+        boolean isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
+        
+        if (isBanMoi) {
+            btnHuy = (Button) findViewById(R.id.buttonHuy);
+            btnCat = (Button) findViewById(R.id.buttonCat);
+            btnThuTien = (Button) findViewById(R.id.buttonThuTien);
 
-        btnHuy = (Button) findViewById(R.id.buttonHuy);
-        btnCat = (Button) findViewById(R.id.buttonCat);
-        btnThuTien = (Button) findViewById(R.id.buttonThuTien);
+            listViewMonAn = (ListView) findViewById(R.id.listView);
+            ds = new ArrayList<>();
+            Cursor cursor = db.getData("SELECT * FROM MonAn");
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(0);
+                String ten = cursor.getString(1);
+                int donGia = cursor.getInt(2);
+                String donVi = cursor.getString(3);
+                boolean isConHang = cursor.getString(4).equals("true");
+                byte[] hinhAnh = cursor.getBlob(5);
 
-        listViewMonAn = (ListView) findViewById(R.id.listView);
-        ds = new ArrayList<>();
-        Cursor cursor = db.getData("SELECT * FROM MonAn");
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String ten = cursor.getString(1);
-            int donGia = cursor.getInt(2);
-            String donVi = cursor.getString(3);
-            boolean isConHang = cursor.getString(4).equals("true");
-            ds.add(new MonAn(id, ten, donGia, donVi, isConHang));
-            adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
-            listViewMonAn.setAdapter(adapter);
+                MonAn monAn = new MonAn(ten, donGia, donVi, isConHang, hinhAnh);
+                monAn.setId(id);
+                ds.add(monAn);
+                adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
+                listViewMonAn.setAdapter(adapter);
+            }
+        } else {
+            Toast.makeText(this, "BAN DANG CO KHACH", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
 
     public static Database db;
     public static final String INTENT_BANAN = "BanAn";
-    public static final String INTENT_SOKHACH = "SoKhach";
+    public static final String INTENT_BANMOI = "BanMoi";
     private final String TAG = "MainActivity";
 
     private DrawerLayout drawer;

@@ -89,6 +89,7 @@ public class BanAnAdapter extends ArrayAdapter<BanAn> {
                 Intent intent = new Intent(context, ChonMonActivity.class);
                 banAn.setSoNguoi(soKhachMoiVao);
                 intent.putExtra(MainActivity.INTENT_BANAN, banAn);
+                intent.putExtra(MainActivity.INTENT_BANMOI, true);
                 context.startActivity(intent);
             }
         });
