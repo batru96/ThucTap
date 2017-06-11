@@ -80,30 +80,24 @@ public class ChonMonActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
-        int soKhach = intent.getIntExtra(MainActivity.INTENT_SOKHACH, -1);
 
         btnHuy = (Button) findViewById(R.id.buttonHuy);
         btnCat = (Button) findViewById(R.id.buttonCat);
         btnThuTien = (Button) findViewById(R.id.buttonThuTien);
 
-
         listViewMonAn = (ListView) findViewById(R.id.listView);
         ds = new ArrayList<>();
-        if (banAn.getSoNguoi() == 0) {
-            Cursor cursor = db.getData("SELECT * FROM MonAn");
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(0);
-                String ten = cursor.getString(1);
-                int donGia = cursor.getInt(2);
-                String donVi = cursor.getString(3);
-                boolean isConHang = cursor.getString(4).equals("true");
-                ds.add(new MonAn(id, ten, donGia, donVi, isConHang));
-            }
-        } else {
-            Toast.makeText(this, "BANG, BAN CO KHACH", Toast.LENGTH_SHORT).show();
+        Cursor cursor = db.getData("SELECT * FROM MonAn");
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String ten = cursor.getString(1);
+            int donGia = cursor.getInt(2);
+            String donVi = cursor.getString(3);
+            boolean isConHang = cursor.getString(4).equals("true");
+            ds.add(new MonAn(id, ten, donGia, donVi, isConHang));
+            adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
+            listViewMonAn.setAdapter(adapter);
         }
-        adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
-        listViewMonAn.setAdapter(adapter);
     }
 
     @Override

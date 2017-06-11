@@ -1,6 +1,5 @@
 package androidapp.batru.cafeshop;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,20 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 
+import adapter.BanAnAdapter;
 import database.Database;
 import model.BanAn;
 
@@ -37,7 +30,10 @@ public class MainActivity extends AppCompatActivity
     private final String TAG = "MainActivity";
 
     private DrawerLayout drawer;
-    private LinearLayout layoutContent;
+    private GridView gvBanAn;
+    private ArrayList<BanAn> ds;
+    private BanAnAdapter adapter;
+    //private LinearLayout layoutContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,110 +58,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        layoutContent = (LinearLayout) findViewById(R.id.listButton);
-        hienThiBanAn();
+        gvBanAn = (GridView) findViewById(R.id.gvBanAn);
+        ds = new ArrayList<>();
+        ds = docDuLieuTuDatabase();
+        adapter = new BanAnAdapter(this, R.layout.item_ban_an, ds);
+        gvBanAn.setAdapter(adapter);
     }
 
-    private void hienThiBanAn() {
-        final ArrayList<BanAn> dsBanAn = new ArrayList<>();
-
-        // Doc du lieu tu database, roi hien thi thong tin cac ban an
+    private ArrayList<BanAn> docDuLieuTuDatabase() {
+        ArrayList<BanAn> ds = new ArrayList<>();
         Cursor cursor = db.getData("SELECT * FROM BanAn");
         while (cursor.moveToNext()) {
-            int idBanAn = cursor.getInt(0);
+            int soBan = cursor.getInt(0);
             int soNguoi = cursor.getInt(1);
-            dsBanAn.add(new BanAn(idBanAn, soNguoi));
+            BanAn banAn = new BanAn(soBan, soNguoi);
+            ds.add(banAn);
         }
-
-        int soCot = 4;
-        int soHang = dsBanAn.size() / soCot;
-        if (soCot * soHang < dsBanAn.size())
-            soHang++;
-
-        int idxButton = 1;
-        for (int i = 0; i < soHang; i++) {
-            LinearLayout horizontal = new LinearLayout(this);
-            horizontal.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            for (int j = 0; j < soCot && idxButton < dsBanAn.size(); j++) {
-                final Button button = new Button(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(5, 5, 5, 5);
-                button.setLayoutParams(params);
-                button.setText("Bàn " + (idxButton));
-
-                boolean isConTrong = dsBanAn.get(idxButton).getSoNguoi() == 0;
-                if (isConTrong) {
-                    button.setBackgroundResource(R.drawable.button_ban_trong);
-                } else {
-                    button.setBackgroundResource(R.drawable.button_co_khach);
-                }
-
-                final int idBanAn = idxButton;
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        xuLyBanAnClicked(idBanAn);
-//                        Intent intent = new Intent(MainActivity.this, ChonMonActivity.class);
-//                        intent.putExtra("id", dsBanAn.get(idBanAn).getSoBan());
-//                        startActivity(intent);
-                    }
-                });
-
-                idxButton++;
-                horizontal.addView(button);
-            }
-            layoutContent.addView(horizontal);
-        }
-    }
-
-    private void xuLyBanAnClicked(int idBanAn) {
-        Cursor cursor = db.getData("SELECT * FROM BanAn WHERE SoBan = " + idBanAn);
-        cursor.moveToFirst();
-        int soBan = cursor.getInt(0);
-        int soNguoi = cursor.getInt(1);
-        BanAn banAn = new BanAn(soBan, soNguoi);
-
-        if (soNguoi == 0) {
-            khoiTaoDialog(banAn);
-        } else {
-            Log.v(TAG, "Ban dang co khach");
-        }
-    }
-
-    private void khoiTaoDialog(final BanAn banAn) {
-        final Dialog dialogThemBanAn = new Dialog(this);
-        dialogThemBanAn.setContentView(R.layout.dialog_them_ban);
-        final EditText edtNhapSoNguoi = (EditText) dialogThemBanAn.findViewById(R.id.edtNhapSoNguoi);
-        Button btnHuy = (Button) dialogThemBanAn.findViewById(R.id.btnHuy);
-        Button btnXacNhan = (Button) dialogThemBanAn.findViewById(R.id.btnXacNhan);
-
-        btnXacNhan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int soKhachMoiVao;
-                if (edtNhapSoNguoi.getText().toString().equals("")) {
-                    soKhachMoiVao = 1;
-                } else {
-                    soKhachMoiVao = Integer.parseInt(edtNhapSoNguoi.getText().toString());
-                }
-                Intent intent = new Intent(MainActivity.this, ChonMonActivity.class);
-                intent.putExtra(INTENT_SOKHACH, soKhachMoiVao);
-                intent.putExtra(INTENT_BANAN, banAn);
-                startActivity(intent);
-                //xuLyThemNguoiVaoBanAn(banAn, soKhachMoiVao);
-            }
-        });
-        btnHuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogThemBanAn.dismiss();
-            }
-        });
-        dialogThemBanAn.show();
-    }
-
-    private void xuLyThemNguoiVaoBanAn(BanAn banAn, int soKhachMoiVao) {
-        db.queryData("UPDATE BanAn SET SoNguoi = " + soKhachMoiVao + " WHERE SoBan = " + banAn.getSoNguoi());
+        return ds;
     }
 
     @Override
@@ -198,8 +107,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 db.queryData("INSERT INTO BanAn VALUES (null, 0)");
-                layoutContent.removeAllViews();
-                hienThiBanAn();
+                Cursor cursor = db.getData("SELECT * FROM BanAn");
+                cursor.moveToLast();
+                BanAn banAn = new BanAn(cursor.getInt(0), cursor.getInt(1));
+                ds.add(banAn);
+                adapter.notifyDataSetChanged();
             }
         });
         dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -250,7 +162,7 @@ public class MainActivity extends AppCompatActivity
     private void xuLyBanHangClicked() {
     }
     //endregion
-    
+
     //region Database
 
     private void khoiTaoDatabase() {
@@ -303,18 +215,6 @@ public class MainActivity extends AppCompatActivity
                 ")");
 
         //themDuLieuBanAn();
-    }
-
-    private void themDuLieuBanAn() {
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        db.queryData("INSERT INTO BanAn VALUES (null, 0);");
-        Toast.makeText(this, "Them du lieu thanh cong", Toast.LENGTH_SHORT).show();
     }
     //endregion
 }
