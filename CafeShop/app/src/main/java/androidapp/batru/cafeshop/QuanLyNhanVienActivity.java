@@ -59,6 +59,8 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         ganEvents();
     }
 
+    //region myfunction
+
     private void ganEvents() {
         btnChonNgayLam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +186,9 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         }
     }
 
+    //endregion
+
+    //region override function
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -210,4 +215,5 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
     public void onBackPressed() {
         chuyenVeParentActivity();
     }
+    //endregion
 }

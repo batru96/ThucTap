@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity
                 "MaNV INTEGER,\n" +
                 "MaBanAn INTEGER,\n" +
                 "DaThanhToan BOOL,\n" +
+                "KhuyenMain INTEGER,\n" +
                 "ThoiGian DATETIME DEFAULT CURRENT_TIME,\n" +
                 "FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNhanVien),\n" +
                 "FOREIGN KEY (MaBanAn) REFERENCES BanAn(SoBan)\n" +
@@ -295,6 +296,7 @@ public class MainActivity extends AppCompatActivity
                 "MaHoaDon INTEGER,\n" +
                 "MaMonAn INTEGER,\n" +
                 "SoLuong INTEGER,\n" +
+                "DonGia INTEGER,\n" +
                 "PRIMARY KEY (MaHoaDon, MaMonAn),\n" +
                 "FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon),\n" +
                 "FOREIGN KEY (MaMonAn) REFERENCES MonAn(MaMonAn)\n" +

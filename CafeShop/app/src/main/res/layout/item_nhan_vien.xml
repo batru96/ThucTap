@@ -23,6 +23,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:textColor="#000"
             android:id="@+id/nhanVienTenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             tools:text="Cristiano Ronaldo" />
 
         <TextView
+            android:textColor="#000"
             android:id="@+id/nhanVienDateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
