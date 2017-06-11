@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,12 +17,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import model.MonAn;
 import singleton.Singleton;
+import singleton.SingletonActivity;
 
 public class ThemThucDonActivity extends AppCompatActivity {
 
@@ -123,12 +121,9 @@ public class ThemThucDonActivity extends AppCompatActivity {
         String gia = edtGia.getText().toString();
         String donVi = edtDonVi.getText().toString();
         byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgHinhAnh);
+
         if (hinhAnh == null) {
-            Drawable drawable = getResources().getDrawable(R.drawable.profile);
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            hinhAnh = stream.toByteArray();
+            hinhAnh = SingletonActivity.decodeByteStreamFromNullImageView(this);
         }
 
         if (gia.equals("")) {

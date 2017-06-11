@@ -1,5 +1,9 @@
 package androidapp.batru.cafeshop;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,9 +12,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import model.MonAn;
+import singleton.Singleton;
 
 /**
  * Created by hoangkhoa on 5/27/17.
@@ -52,6 +56,9 @@ public class SuaThucDonActivity extends AppCompatActivity {
         edtDonVi.setText(monAn.getDonVi());
         ckNgunBan.setChecked(!monAn.isConHang());
 
+        Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(monAn.getHinhAnh());
+        imgHinhAnh.setImageBitmap(bitmap);
+
 
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,9 +82,15 @@ public class SuaThucDonActivity extends AppCompatActivity {
     }
 
     private void suaMonAn(MonAn monAn) {
-        MainActivity.db.queryData("UPDATE MonAn SET TenMonAn = '" + monAn.getTen() + "', DonGia = "
-                + monAn.getGia() + ", DonViTinh = '" + monAn.getDonVi() + "'," +
-                " ConHang = '" + monAn.isConHang() + "' WHERE MaMonAn = " + monAn.getId());
-        Toast.makeText(this, "Sua thanh cong", Toast.LENGTH_SHORT).show();
+        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("TenMonAn", monAn.getTen());
+        values.put("DonGia", monAn.getGia());
+        values.put("DonViTinh", monAn.getDonVi());
+        values.put("ConHang", monAn.isConHang());
+
+        database.update("MonAn", values, "MaMonAn = " + monAn.getId(), null);
+
+        startActivity(new Intent(this, ThucDonActivity.class));
     }
 }

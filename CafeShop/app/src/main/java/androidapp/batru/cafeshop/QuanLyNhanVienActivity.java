@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,8 +18,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -29,6 +27,7 @@ import java.util.Calendar;
 
 import model.NhanVien;
 import singleton.Singleton;
+import singleton.SingletonActivity;
 
 public class QuanLyNhanVienActivity extends AppCompatActivity {
 
@@ -93,6 +92,10 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
     }
 
     private void xuLyButtonXongClicked() {
+        if (edtTen.getText().toString().equals("")) {
+            Toast.makeText(this, getResources().getString(R.string.toasl_nhap_lieu), Toast.LENGTH_SHORT).show();
+            return;
+        }
         SQLiteDatabase database = MainActivity.db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -102,11 +105,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgNhanVien);
         // Tao bytearray tu image profile mac dinh
         if (hinhAnh == null) {
-            Drawable drawable = getResources().getDrawable(R.drawable.profile);
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            hinhAnh = stream.toByteArray();
+            hinhAnh = SingletonActivity.decodeByteStreamFromNullImageView(this);
         }
         values.put("HinhAnh", hinhAnh);
 
