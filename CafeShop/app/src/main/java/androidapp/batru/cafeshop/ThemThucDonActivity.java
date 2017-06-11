@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import model.MonAn;
+import singleton.Singleton;
 
 public class ThemThucDonActivity extends AppCompatActivity {
 
@@ -108,9 +110,7 @@ public class ThemThucDonActivity extends AppCompatActivity {
                 }
             }
         }
-        if (bitmap != null) {
-            imgHinhAnh.setImageBitmap(bitmap);
-        }
+        imgHinhAnh.setImageBitmap(bitmap);
     }
 
     @Override
@@ -120,35 +120,30 @@ public class ThemThucDonActivity extends AppCompatActivity {
 
     private void xuLyClicked() {
         String ten = edtTen.getText().toString();
-        long gia;
-        try {
-            gia = Long.parseLong(edtGia.getText().toString());
-        } catch (Exception e) {
-            gia = 0;
-        }
+        String gia = edtGia.getText().toString();
         String donVi = edtDonVi.getText().toString();
-
-        if (ten.equals("") || gia == 0 || donVi.equals("")) {
-            Toast.makeText(this, "Vui long nhap du lieu day du", Toast.LENGTH_SHORT).show();
-        } else {
-
-            byte[] anh = getByteArrayForImageView(imgHinhAnh);
-            MonAn monAn = new MonAn(ten, gia, donVi, true, anh);
-
-            themMonAn(monAn);
+        byte[] hinhAnh = Singleton.getInstance().getByteArrayForImageView(imgHinhAnh);
+        if (hinhAnh == null) {
+            Drawable drawable = getResources().getDrawable(R.drawable.profile);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            hinhAnh = stream.toByteArray();
         }
-    }
-    private byte[] getByteArrayForImageView(ImageView image) {
-        BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
-        if (drawable == null)
-            return null;
-        Bitmap bitmap = drawable.getBitmap();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
+        if (gia.equals("")) {
+            gia = "0";
+        }
+        
+        if (ten.equals("") || gia.equals("") || donVi.equals("")) {
+            Toast.makeText(this, getResources().getString(R.string.toasl_nhap_lieu), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        MonAn monAn = new MonAn(ten, Long.parseLong(gia), donVi , true, hinhAnh);
+        themMonAn(monAn);
+    }
+    
     private void themMonAn(MonAn monAn) {
         SQLiteDatabase database = MainActivity.db.getWritableDatabase();
 
@@ -160,7 +155,6 @@ public class ThemThucDonActivity extends AppCompatActivity {
         values.put("HinhAnh", monAn.getHinhAnh());
 
         database.insert("MonAn", null, values);
-
-        Toast.makeText(this, "Thanh Cong", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ThucDonActivity.class));
     }
 }

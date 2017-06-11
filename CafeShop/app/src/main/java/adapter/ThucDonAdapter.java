@@ -3,6 +3,8 @@ package adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,10 +74,14 @@ public class ThucDonAdapter extends BaseAdapter {
             }
         });
 
+        Bitmap bitmap;
         if (sanPham.getHinhAnh() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(sanPham.getHinhAnh(), 0, sanPham.getHinhAnh().length);
-            imgHinhAnh.setImageBitmap(bitmap);
+            bitmap = BitmapFactory.decodeByteArray(sanPham.getHinhAnh(), 0, sanPham.getHinhAnh().length);
+        } else {
+            Drawable drawable = this.context.getResources().getDrawable(R.drawable.profile);
+            bitmap = ((BitmapDrawable) drawable).getBitmap();
         }
+        imgHinhAnh.setImageBitmap(bitmap);
 
         return convertView;
     }

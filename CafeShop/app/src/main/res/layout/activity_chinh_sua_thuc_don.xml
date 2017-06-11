@@ -16,6 +16,24 @@
         android:layout_centerInParent="true"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imgHinhAnh"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#000"
+            android:contentDescription="@string/load_failed" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:text="Chọn hình ảnh"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="Tên món"
+                android:textColor="#000"
                 android:textSize="16sp" />
 
             <EditText
@@ -51,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="Giá bán"
+                android:textColor="#000"
                 android:textSize="16sp" />
 
             <EditText
@@ -76,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="Đơn vị tính"
+                android:textColor="#000"
                 android:textSize="16sp" />
 
             <EditText

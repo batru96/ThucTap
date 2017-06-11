@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import model.MonAn;
@@ -20,6 +21,7 @@ public class SuaThucDonActivity extends AppCompatActivity {
     private EditText edtTen, edtGia, edtDonVi;
     private Button btnXacNhan;
     private CheckBox ckNgunBan;
+    private ImageView imgHinhAnh;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,12 +44,14 @@ public class SuaThucDonActivity extends AppCompatActivity {
         edtDonVi = (EditText) findViewById(R.id.editDonVi);
         btnXacNhan = (Button) findViewById(R.id.xongButton);
         ckNgunBan = (CheckBox) findViewById(R.id.checkboxTrangThai);
+        imgHinhAnh = (ImageView) findViewById(R.id.imgHinhAnh);
 
         final MonAn monAn = (MonAn) getIntent().getSerializableExtra("MONAN");
         edtTen.setText(monAn.getTen());
         edtGia.setText(monAn.getGia() + "");
         edtDonVi.setText(monAn.getDonVi());
         ckNgunBan.setChecked(!monAn.isConHang());
+
 
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
