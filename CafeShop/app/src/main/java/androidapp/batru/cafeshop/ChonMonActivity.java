@@ -32,7 +32,9 @@ public class ChonMonActivity extends AppCompatActivity {
     private Button btnCat;
     private Button btnThuTien;
 
-    Intent intent;
+    private Intent intent;
+    private boolean isBanMoi;
+    private int[] dsSoLuong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +49,14 @@ public class ChonMonActivity extends AppCompatActivity {
         btnHuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChonMonActivity.this, MainActivity.class));
+                xuLyHuy();
             }
         });
 
         btnCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ChonMonActivity.this, "Cap nhat ban an va hoa don", Toast.LENGTH_SHORT).show();
+                xuLyCat();
             }
         });
 
@@ -64,6 +66,14 @@ public class ChonMonActivity extends AppCompatActivity {
                 xuLyThuTien();
             }
         });
+    }
+
+    private void xuLyCat() {
+        dsSoLuong = adapter.getDanhSachSoLuong();
+    }
+
+    private void xuLyHuy() {
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private void xuLyThuTien() {
@@ -80,7 +90,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
-        boolean isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
+        isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
         
         if (isBanMoi) {
             btnHuy = (Button) findViewById(R.id.buttonHuy);
