@@ -1,7 +1,6 @@
 package adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +12,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidapp.batru.cafeshop.R;
-import model.MonAn;
-import singleton.Singleton;
+import model.ChonMon;
 
 /**
- * Created by hoangkhoa on 5/25/17.
+ * Created by hoangkhoa on 6/12/17.
  */
 
 public class ChonMonAdapter extends BaseAdapter {
+
     private Context context;
     private int resource;
-    private ArrayList<MonAn> ds;
+    private ArrayList<ChonMon> ds;
 
-    public ChonMonAdapter(Context context, int resource, ArrayList<MonAn> ds) {
+    public ChonMonAdapter(Context context, int resource, ArrayList<ChonMon> ds) {
         this.context = context;
         this.resource = resource;
         this.ds = ds;
@@ -47,10 +46,9 @@ public class ChonMonAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        convertView = inflater.inflate(resource, null);
+        convertView = inflater.inflate(this.resource, null);
 
         TextView txtTen = (TextView) convertView.findViewById(R.id.ten_item);
         TextView txtGia = (TextView) convertView.findViewById(R.id.gia_item);
@@ -59,13 +57,16 @@ public class ChonMonAdapter extends BaseAdapter {
         ImageView imgHinhAnh = (ImageView) convertView.findViewById(R.id.image_listview);
         final TextView txtSoLuong = (TextView) convertView.findViewById(R.id.soLuong);
 
-        MonAn monAn = ds.get(position);
+        ChonMon chonMon = ds.get(position);
 
-        Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(monAn.getHinhAnh());
-        imgHinhAnh.setImageBitmap(bitmap);
+        //Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(chonMon.getHinhAnh());
+        //imgHinhAnh.setImageBitmap(bitmap);
 
-        txtGia.setText(monAn.getGia() + "đ");
-        txtTen.setText(monAn.getTen() + "");
+        txtGia.setText(chonMon.getGia() + "đ");
+        txtTen.setText(chonMon.getTen() + "");
+        txtSoLuong.setText(chonMon.getSoLuong() + "");
+
+
         btnCong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

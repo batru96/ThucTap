@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/image_listview"
@@ -13,11 +13,11 @@
         android:src="@drawable/profile" />
 
     <RelativeLayout
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image_listview"
+        android:layout_centerVertical="true"
         android:layout_toEndOf="@id/image_listview"
+        android:layout_toRightOf="@id/image_listview"
         android:gravity="center_vertical"
         android:padding="8dp">
 
@@ -39,33 +39,38 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btnTru"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@color/fbutton_color_transparent"
+            android:contentDescription="@string/load_failed"
             android:src="@drawable/ic_remove" />
 
         <TextView
             android:id="@+id/soLuong"
-            android:textColor="#65DB4A"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="0"
+            android:textColor="#65DB4A"
             android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/btnCong"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:background="@color/fbutton_color_transparent"
+            android:contentDescription="@string/load_failed"
             android:src="@drawable/ic_add" />
     </LinearLayout>
 

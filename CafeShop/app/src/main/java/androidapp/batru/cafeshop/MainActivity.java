@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
     private GridView gvBanAn;
     private ArrayList<BanAn> ds;
     private BanAnAdapter adapter;
-    //private LinearLayout layoutContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

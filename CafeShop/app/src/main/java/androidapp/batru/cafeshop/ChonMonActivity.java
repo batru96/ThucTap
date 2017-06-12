@@ -1,7 +1,6 @@
 package androidapp.batru.cafeshop;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,9 +15,7 @@ import java.util.ArrayList;
 
 import adapter.ChonMonAdapter;
 import model.BanAn;
-import model.MonAn;
-
-import static androidapp.batru.cafeshop.MainActivity.db;
+import model.ChonMon;
 
 public class ChonMonActivity extends AppCompatActivity {
 
@@ -26,7 +23,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
     private ListView listViewMonAn;
     private ChonMonAdapter adapter;
-    private ArrayList<MonAn> ds;
+    private ArrayList<ChonMon> ds;
 
     private Button btnHuy;
     private Button btnCat;
@@ -42,7 +39,7 @@ public class ChonMonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chon_mon);
 
         initControls();
-        initEvents();
+        //initEvents();
     }
 
     private void initEvents() {
@@ -56,7 +53,6 @@ public class ChonMonActivity extends AppCompatActivity {
         btnCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xuLyCat();
             }
         });
 
@@ -68,9 +64,6 @@ public class ChonMonActivity extends AppCompatActivity {
         });
     }
 
-    private void xuLyCat() {
-        dsSoLuong = adapter.getDanhSachSoLuong();
-    }
 
     private void xuLyHuy() {
         startActivity(new Intent(this, MainActivity.class));
@@ -88,34 +81,22 @@ public class ChonMonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        btnHuy = (Button) findViewById(R.id.buttonHuy);
+        btnCat = (Button) findViewById(R.id.buttonCat);
+        btnThuTien = (Button) findViewById(R.id.buttonThuTien);
+
         Intent intent = getIntent();
         BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
         isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
-        
+
+        ListView lvChonMon = (ListView) findViewById(R.id.lvChonMon);
+        ArrayList<ChonMon> ds = new ArrayList<>();
+        adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
+        lvChonMon.setAdapter(adapter);
+
         if (isBanMoi) {
-            btnHuy = (Button) findViewById(R.id.buttonHuy);
-            btnCat = (Button) findViewById(R.id.buttonCat);
-            btnThuTien = (Button) findViewById(R.id.buttonThuTien);
-
-            listViewMonAn = (ListView) findViewById(R.id.listView);
-            ds = new ArrayList<>();
-            Cursor cursor = db.getData("SELECT * FROM MonAn");
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(0);
-                String ten = cursor.getString(1);
-                int donGia = cursor.getInt(2);
-                String donVi = cursor.getString(3);
-                boolean isConHang = cursor.getString(4).equals("true");
-                byte[] hinhAnh = cursor.getBlob(5);
-
-                MonAn monAn = new MonAn(ten, donGia, donVi, isConHang, hinhAnh);
-                monAn.setId(id);
-                ds.add(monAn);
-                adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
-                listViewMonAn.setAdapter(adapter);
-            }
         } else {
-            Toast.makeText(this, "BAN DANG CO KHACH", Toast.LENGTH_SHORT).show();
+
         }
     }
 
