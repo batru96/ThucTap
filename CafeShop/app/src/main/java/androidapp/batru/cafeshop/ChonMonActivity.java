@@ -1,6 +1,9 @@
 package androidapp.batru.cafeshop;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +22,10 @@ import model.ChonMon;
 
 public class ChonMonActivity extends AppCompatActivity {
 
+    //region Properties
     private final String TAG = "CHONMON_ACTVITY";
 
-    private ListView listViewMonAn;
+    private ListView lvChonMon;
     private ChonMonAdapter adapter;
     private ArrayList<ChonMon> ds;
 
@@ -30,8 +34,9 @@ public class ChonMonActivity extends AppCompatActivity {
     private Button btnThuTien;
 
     private Intent intent;
+    private BanAn banAn;
     private boolean isBanMoi;
-    private int[] dsSoLuong;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,38 +44,7 @@ public class ChonMonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chon_mon);
 
         initControls();
-        //initEvents();
-    }
-
-    private void initEvents() {
-        btnHuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xuLyHuy();
-            }
-        });
-
-        btnCat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        btnThuTien.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xuLyThuTien();
-            }
-        });
-    }
-
-
-    private void xuLyHuy() {
-        startActivity(new Intent(this, MainActivity.class));
-    }
-
-    private void xuLyThuTien() {
-        Toast.makeText(this, "THU TIEN NE!!!", Toast.LENGTH_SHORT).show();
+        initEvents();
     }
 
     private void initControls() {
@@ -86,20 +60,92 @@ public class ChonMonActivity extends AppCompatActivity {
         btnThuTien = (Button) findViewById(R.id.buttonThuTien);
 
         Intent intent = getIntent();
-        BanAn banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
+        banAn = (BanAn) intent.getSerializableExtra(MainActivity.INTENT_BANAN);
         isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
 
-        ListView lvChonMon = (ListView) findViewById(R.id.lvChonMon);
-        ArrayList<ChonMon> ds = new ArrayList<>();
+        lvChonMon = (ListView) findViewById(R.id.lvChonMon);
+        ds = new ArrayList<>();
+
+        Cursor cursor = MainActivity.db.getData(" SELECT * \n" +
+                "FROM MONAN M LEFT JOIN CHITIETHOADON C\n" +
+                " ON M.MaMonAn = C.MaMonAn");
+        while (cursor.moveToNext()) {
+            ChonMon chonMon = new ChonMon();
+            int id = cursor.getInt(0);
+            chonMon.setId(id);
+
+            String ten = cursor.getString(1);
+            chonMon.setTen(ten);
+
+            long gia = cursor.getLong(2);
+            chonMon.setGia(gia);
+
+            byte[] hinhAnh = cursor.getBlob(5);
+            chonMon.setHinhAnh(hinhAnh);
+
+            int soLuong = cursor.getInt(8);
+            chonMon.setSoLuong(soLuong);
+
+            ds.add(chonMon);
+        }
         adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
         lvChonMon.setAdapter(adapter);
+    }
 
+    private void initEvents() {
+        btnHuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xuLyHuy();
+            }
+        });
+
+        btnCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xuLyCat();
+            }
+        });
+
+        btnThuTien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xuLyThuTien();
+            }
+        });
+    }
+
+    //region MyFunction
+    private void xuLyCat() {
         if (isBanMoi) {
-        } else {
+            //Ban moi, tao hoa don moi, cap nhat so nguoi cho ban an, tao chitiethoadon moi tuong ung
+            SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+            ContentValues hoaDonValues = new ContentValues();
+            hoaDonValues.put("MaBanAn", banAn.getSoBan());
+            hoaDonValues.put("DaThanhToan", 0);
+            hoaDonValues.put("KhuyenMai", 0);
+            hoaDonValues.put("MaNV", MainActivity.MA_NV); // Chua lam dang nhap cho nguoi su dung
+            database.insert("HoaDon", null, hoaDonValues);
 
+            ContentValues banAnValues = new ContentValues();
+            banAnValues.put("SoNguoi", banAn.getSoNguoi());
+            database.update("", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+        } else {
+            // Khi ban dang co khach, chi cap nhat lai chitiethoadon
         }
     }
 
+    private void xuLyHuy() {
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private void xuLyThuTien() {
+        Toast.makeText(this, "THU TIEN NE!!!", Toast.LENGTH_SHORT).show();
+    }
+
+    //endregion
+
+    //region Override Function
     @Override
     protected void onPause() {
         super.onPause();
@@ -122,4 +168,6 @@ public class ChonMonActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //endregion
 }
