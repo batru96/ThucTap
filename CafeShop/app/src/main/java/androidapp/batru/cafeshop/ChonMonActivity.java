@@ -129,7 +129,16 @@ public class ChonMonActivity extends AppCompatActivity {
 
             ContentValues banAnValues = new ContentValues();
             banAnValues.put("SoNguoi", banAn.getSoNguoi());
-            database.update("", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+            database.update("BanAn", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+
+//            Cursor cursor = MainActivity.db.getData("SELECT * FROM HoaDon");
+//            cursor.moveToLast();
+//            int maHoaDon = cursor.getInt(0);
+//            for (int i = 0; i < ds.size(); i++) {
+//                ContentValues chiTietValues = new ContentValues();
+//            }
+            startActivity(new Intent(this, MainActivity.class));
+
         } else {
             // Khi ban dang co khach, chi cap nhat lai chitiethoadon
         }
