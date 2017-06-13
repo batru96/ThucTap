@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import model.MonAn;
 import singleton.Singleton;
 
+import static androidapp.batru.cafeshop.MainActivity.db;
+
 /**
  * Created by hoangkhoa on 5/27/17.
  */
@@ -82,7 +84,7 @@ public class SuaThucDonActivity extends AppCompatActivity {
     }
 
     private void suaMonAn(MonAn monAn) {
-        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+        SQLiteDatabase database = db.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("TenMonAn", monAn.getTen());
         values.put("DonGia", monAn.getGia());

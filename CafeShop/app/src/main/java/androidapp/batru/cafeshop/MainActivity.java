@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     public static Database db;
     public static final String INTENT_BANAN = "BanAn";
     public static final String INTENT_BANMOI = "BanMoi";
-    public static String MA_NV = "1";
+    public static String MA_NV = "0";
     private final String TAG = "MainActivity";
 
     private DrawerLayout drawer;
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                 "SoNguoi INTEGER\n" +
                 ");");
 
-        db.queryData("CREATE TABLE IF NOT EXISTS MonAn\n" +
+       db.queryData("CREATE TABLE IF NOT EXISTS MonAn\n" +
                 "(\n" +
                 "MaMonAn INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "TenMonAn VARCHAR,\n" +

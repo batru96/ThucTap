@@ -29,6 +29,8 @@ import model.NhanVien;
 import singleton.Singleton;
 import singleton.SingletonActivity;
 
+import static androidapp.batru.cafeshop.MainActivity.db;
+
 public class QuanLyNhanVienActivity extends AppCompatActivity {
 
     //region properties
@@ -96,7 +98,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.toasl_nhap_lieu), Toast.LENGTH_SHORT).show();
             return;
         }
-        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+        SQLiteDatabase database = db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("TenNhanVien", edtTen.getText().toString());

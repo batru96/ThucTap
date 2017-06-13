@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import adapter.ThucDonAdapter;
 import model.MonAn;
 
+import static androidapp.batru.cafeshop.MainActivity.db;
+
 public class ThucDonActivity extends AppCompatActivity{
 
     private ListView lvThucDon;
@@ -70,7 +72,7 @@ public class ThucDonActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MonAn monAn = dsMonAn.get(position);
-                MainActivity.db.queryData("DELETE FROM MonAn WHERE MaMonAn = " + monAn.getId());
+                db.queryData("DELETE FROM MonAn WHERE MaMonAn = " + monAn.getId());
                 dsMonAn.remove(position);
                 adapter.notifyDataSetChanged();
             }
@@ -87,7 +89,7 @@ public class ThucDonActivity extends AppCompatActivity{
 
     private ArrayList<MonAn> docDuLieuTuDatabase() {
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
-        Cursor cursor = MainActivity.db.getData("SELECT * FROM MonAn");
+        Cursor cursor = db.getData("SELECT * FROM MonAn");
         while (cursor.moveToNext()) {
             MonAn monAn = new MonAn();
 

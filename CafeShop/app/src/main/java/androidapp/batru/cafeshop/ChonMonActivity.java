@@ -3,10 +3,10 @@ package androidapp.batru.cafeshop;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import adapter.ChonMonAdapter;
 import model.BanAn;
 import model.ChonMon;
+import singleton.Singleton;
+
+import static androidapp.batru.cafeshop.MainActivity.db;
 
 public class ChonMonActivity extends AppCompatActivity {
 
@@ -36,6 +39,8 @@ public class ChonMonActivity extends AppCompatActivity {
     private Intent intent;
     private BanAn banAn;
     private boolean isBanMoi;
+    
+    private int maHoaDon;
     //endregion
 
     @Override
@@ -66,30 +71,43 @@ public class ChonMonActivity extends AppCompatActivity {
         lvChonMon = (ListView) findViewById(R.id.lvChonMon);
         ds = new ArrayList<>();
 
-        Cursor cursor = MainActivity.db.getData(" SELECT * \n" +
-                "FROM MONAN M LEFT JOIN CHITIETHOADON C\n" +
-                " ON M.MaMonAn = C.MaMonAn");
-        while (cursor.moveToNext()) {
-            ChonMon chonMon = new ChonMon();
-            int id = cursor.getInt(0);
-            chonMon.setId(id);
 
-            String ten = cursor.getString(1);
-            chonMon.setTen(ten);
-
-            long gia = cursor.getLong(2);
-            chonMon.setGia(gia);
-
-            byte[] hinhAnh = cursor.getBlob(5);
-            chonMon.setHinhAnh(hinhAnh);
-
-            int soLuong = cursor.getInt(8);
-            chonMon.setSoLuong(soLuong);
-
-            ds.add(chonMon);
+        /*
+        * Kiem tra xem ban an dang co khach hay khong
+        * - Neu ban an khong co khach, load het cac mon an da ton tai thucdon voi dieu kien mon an do
+        * van con.
+        * - Neu ban an dang co khach(tuc la ban da co hoa don roi -> MaHoaDon), load danh sach cac mon an voi
+        * cau truy van "MonAn m LEFT JOIN ChiTietHoaDon c ON m.MaMonAn = c.MaMonAn
+        * WHERE c.MaHoaDon = 'MaHoaDon' OR c.MaHoaDon IS NULL"
+        *
+        * */
+        if (isBanMoi) {
+            loadThucDonChoBanMoi();
+        } else {
+            loadThucDonChoBanCoKhach();
         }
         adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
         lvChonMon.setAdapter(adapter);
+    }
+
+    private void loadThucDonChoBanCoKhach() {
+    }
+
+    private void loadThucDonChoBanMoi() {
+        Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
+                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
+                "ON m.MaMonAn = c.MaMonAn");
+        while (cursor.moveToNext()) {
+            boolean isConHang = cursor.getString(3).equals("1");
+            if (isConHang) {
+                int maMonAn = cursor.getInt(0);
+                String tenMonAn = cursor.getString(1);
+                long gia = cursor.getLong(2);
+                byte[] hinhAnh = cursor.getBlob(4);
+                int soLuong = cursor.getInt(5);
+                ds.add(new ChonMon(maMonAn, tenMonAn, gia, soLuong, hinhAnh));
+            }
+        }
     }
 
     private void initEvents() {
@@ -119,28 +137,36 @@ public class ChonMonActivity extends AppCompatActivity {
     private void xuLyCat() {
         if (isBanMoi) {
             //Ban moi, tao hoa don moi, cap nhat so nguoi cho ban an, tao chitiethoadon moi tuong ung
-            SQLiteDatabase database = MainActivity.db.getWritableDatabase();
             ContentValues hoaDonValues = new ContentValues();
             hoaDonValues.put("MaBanAn", banAn.getSoBan());
             hoaDonValues.put("DaThanhToan", 0);
-            hoaDonValues.put("KhuyenMai", 0);
-            hoaDonValues.put("MaNV", MainActivity.MA_NV); // Chua lam dang nhap cho nguoi su dung
-            database.insert("HoaDon", null, hoaDonValues);
+            hoaDonValues.put("KhuyenMain", 0);
+            hoaDonValues.put("ThoiGian", "");
+            hoaDonValues.put("MaNV", Singleton.getInstance().maNhanVien); // Chua lam dang nhap cho nguoi su dung
+            Singleton.getInstance().database.insert("HoaDon", null, hoaDonValues);
 
             ContentValues banAnValues = new ContentValues();
             banAnValues.put("SoNguoi", banAn.getSoNguoi());
-            database.update("BanAn", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+            long kqAdd = Singleton.getInstance().database.update("BanAn", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+            Log.v(TAG, "So luong dong add vao table ban an: " + kqAdd);
 
-//            Cursor cursor = MainActivity.db.getData("SELECT * FROM HoaDon");
-//            cursor.moveToLast();
-//            int maHoaDon = cursor.getInt(0);
-//            for (int i = 0; i < ds.size(); i++) {
-//                ContentValues chiTietValues = new ContentValues();
-//            }
+            Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.HinhAnh, c.SoLuong\n" +
+                    "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
+                    "On m.MaMonAn = c.MaMonAn\n" +
+                    "WHERE c.MaHoaDon = " + maHoaDon + " OR c.MaHoaDon is NULL");
+            while (cursor.moveToNext()) {
+                int maMonAn = cursor.getInt(0);
+                String tenMonAn = cursor.getString(1);
+                long donGia = cursor.getLong(2);
+                byte[] hinhAnh = cursor.getBlob(3);
+                int soLuong = cursor.getInt(4);
+                ds.add(new ChonMon(maMonAn, tenMonAn, donGia, soLuong, hinhAnh));
+            }
             startActivity(new Intent(this, MainActivity.class));
 
         } else {
             // Khi ban dang co khach, chi cap nhat lai chitiethoadon
+
         }
     }
 

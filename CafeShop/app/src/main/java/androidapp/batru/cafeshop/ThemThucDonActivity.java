@@ -24,6 +24,8 @@ import model.MonAn;
 import singleton.Singleton;
 import singleton.SingletonActivity;
 
+import static androidapp.batru.cafeshop.MainActivity.db;
+
 public class ThemThucDonActivity extends AppCompatActivity {
 
     private final String TAG = "ThemThucDonActivity";
@@ -140,7 +142,7 @@ public class ThemThucDonActivity extends AppCompatActivity {
     }
     
     private void themMonAn(MonAn monAn) {
-        SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+        SQLiteDatabase database = db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("TenMonAn", monAn.getTen());

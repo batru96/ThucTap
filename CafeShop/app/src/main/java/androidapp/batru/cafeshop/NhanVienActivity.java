@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import adapter.NhanVienAdapter;
 import model.NhanVien;
 
+import static androidapp.batru.cafeshop.MainActivity.db;
+
 public class NhanVienActivity extends AppCompatActivity {
 
     //region properties
@@ -80,7 +82,7 @@ public class NhanVienActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 NhanVien nhanvien = ds.get(position);
-                MainActivity.db.queryData("DELETE FROM NhanVien WHERE MaNhanVien = " + nhanvien.getMaNv());
+                db.queryData("DELETE FROM NhanVien WHERE MaNhanVien = " + nhanvien.getMaNv());
                 ds.remove(position);
                 adapter.notifyDataSetChanged();
             }
@@ -96,7 +98,7 @@ public class NhanVienActivity extends AppCompatActivity {
 
     private ArrayList<NhanVien> docDuLieuTuDatabase() {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-        Cursor cursor = MainActivity.db.getData("SELECT * FROM NhanVien");
+        Cursor cursor = db.getData("SELECT * FROM NhanVien");
         while (cursor.moveToNext()) {
             NhanVien nv = new NhanVien();
 
