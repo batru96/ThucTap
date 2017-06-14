@@ -11,49 +11,69 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/linearBottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/linearBottom"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/buttonHuy"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/darker_gray"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:text="@string/huy"
+            android:textAllCaps="false" />
 
-            <Button
-                android:id="@+id/buttonHuy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/huy"
-                android:textAllCaps="false" />
+        <Button
+            android:id="@+id/buttonCat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cat"
+            android:textAllCaps="false" />
 
-            <Button
-                android:id="@+id/buttonCat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cat"
-                android:textAllCaps="false" />
+        <Button
+            android:id="@+id/buttonThuTien"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/thu_tien"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonThuTien"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/thu_tien"
-                android:textAllCaps="false" />
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/layoutSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearBottom"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <ListView
-            android:id="@+id/lvChonMon"
-            android:layout_above="@id/linearBottom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="Nhân viên"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerNhanVien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="end" />
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/lvChonMon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layoutSpinner"
+        android:layout_below="@id/toolbar" />
 </RelativeLayout>

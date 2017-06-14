@@ -19,7 +19,6 @@ public class Singleton {
         return singleton;
     }
 
-    public int maNhanVien = -1;
     public SQLiteDatabase database = MainActivity.db.getWritableDatabase();
 
     public byte[] getByteArrayForImageView(ImageView image) {
