@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         khoiTaoDatabase();
         initControls();
+        debug();
     }
 
     private void initControls() {
@@ -215,6 +217,41 @@ public class MainActivity extends AppCompatActivity
                 ")");
 
         //themDuLieuBanAn();
+    }
+
+    void debug() {
+        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(2, 2, 5, 25000)");
+        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(2, 3, 10, 10000)");
+
+        Cursor cursor = db.getData("SELECT * FROM BanAn");
+        Log.v(TAG, "------------------");
+        while (cursor.moveToNext()) {
+            Log.v(TAG, "SoBan: " + cursor.getInt(0) + " || SoNguoi: " + cursor.getInt(1));
+        }
+
+        Log.v(TAG, "---------NHANVIEN---------");
+        cursor = db.getData("SELECT * FROM NhanVien");
+        while (cursor.moveToNext()) {
+            Log.v(TAG, "MaNhanVien: " + cursor.getInt(0) + " || TenNhanVien: " + cursor.getString(1) + " || NgayLamViec" + cursor.getString(2) + "|| HinhAnh: " + cursor.getBlob(3));
+        }
+
+        Log.v(TAG, "---------MonAn-------------");
+        cursor = db.getData("SELECT * FROM MonAn");
+        while (cursor.moveToNext()) {
+            Log.v(TAG, "MaMonAn: " + cursor.getInt(0) + " || TenMonAn: " + cursor.getString(1) + " || DonGia: " + cursor.getLong(2) + " || DonViTinh: " + cursor.getString(3) + " || ConHang: " + cursor.getString(4) + " || HinhAnh: " + cursor.getBlob(5));
+        }
+
+        Log.v(TAG, "---------HOADON-------------");
+        cursor = db.getData("SELECT * FROM HoaDon");
+        while (cursor.moveToNext()) {
+            Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaNV: " + cursor.getInt(1) + " || MaBanAn: " + cursor.getInt(2) + " || DaThanhToan: " + cursor.getString(3) + " || KhuyenMai: " + cursor.getInt(4) + " || ThoiGian: " + cursor.getString(5));
+        }
+
+        Log.v(TAG, "----------CHITIETHOADON-----------");
+        cursor = db.getData("SELECT * FROM ChiTietHoaDon");
+        while (cursor.moveToNext()) {
+            Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
+        }
     }
     //endregion
 }

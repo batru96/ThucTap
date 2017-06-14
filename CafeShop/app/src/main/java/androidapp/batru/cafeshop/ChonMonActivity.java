@@ -39,7 +39,7 @@ public class ChonMonActivity extends AppCompatActivity {
     private Intent intent;
     private BanAn banAn;
     private boolean isBanMoi;
-    
+
     private int maHoaDon;
     //endregion
 
@@ -91,6 +91,17 @@ public class ChonMonActivity extends AppCompatActivity {
     }
 
     private void loadThucDonChoBanCoKhach() {
+        Cursor cursor = db.getData("SELECT h.MaHoaDon FROM BanAn b JOIN HoaDon h ON b.SoBan = h.MaBanAn WHERE h.DaThanhToan = 0 AND h.MaBanAn = " + banAn.getSoBan());
+        if (!cursor.moveToNext()) {
+            Log.d(TAG, "Cursor Failed");
+            return;
+        }
+        maHoaDon = cursor.getInt(0);
+        cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
+                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
+                "ON m.MaMonAn = c.MaMonAn WHERE c.MaHoaDon IS NULL OR c.MaHoaDon = " + maHoaDon);
+        Toast.makeText(this, cursor.getCount() + "", Toast.LENGTH_SHORT).show();
+        ds = docDuLieuTuCursor(cursor);
     }
 
     private void loadThucDonChoBanMoi() {
@@ -108,6 +119,22 @@ public class ChonMonActivity extends AppCompatActivity {
                 ds.add(new ChonMon(maMonAn, tenMonAn, gia, soLuong, hinhAnh));
             }
         }
+    }
+    
+    private ArrayList<ChonMon> docDuLieuTuCursor(Cursor cursor) {
+        ArrayList<ChonMon> arr = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            boolean isConHang = cursor.getString(3).equals("1");
+            if (isConHang) {
+                int maMonAn = cursor.getInt(0);
+                String tenMonAn = cursor.getString(1);
+                long gia = cursor.getLong(2);
+                byte[] hinhAnh = cursor.getBlob(4);
+                int soLuong = cursor.getInt(5);
+                arr.add(new ChonMon(maMonAn, tenMonAn, gia, soLuong, hinhAnh));
+            }
+        }
+        return arr;
     }
 
     private void initEvents() {
@@ -153,7 +180,7 @@ public class ChonMonActivity extends AppCompatActivity {
             Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.HinhAnh, c.SoLuong\n" +
                     "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
                     "On m.MaMonAn = c.MaMonAn\n" +
-                    "WHERE c.MaHoaDon = " + maHoaDon + " OR c.MaHoaDon is NULL");
+                    "WHERE c.MaHoaDon = " + " OR c.MaHoaDon is NULL");
             while (cursor.moveToNext()) {
                 int maMonAn = cursor.getInt(0);
                 String tenMonAn = cursor.getString(1);
@@ -166,7 +193,6 @@ public class ChonMonActivity extends AppCompatActivity {
 
         } else {
             // Khi ban dang co khach, chi cap nhat lai chitiethoadon
-
         }
     }
 
