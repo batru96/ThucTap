@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import adapter.ChonMonAdapter;
 import model.BanAn;
 import model.ChonMon;
+import model.NhanVien;
+import singleton.Singleton;
 
 import static androidapp.batru.cafeshop.MainActivity.db;
 
@@ -30,14 +33,15 @@ public class ChonMonActivity extends AppCompatActivity {
 
     private ListView lvChonMon;
     private ChonMonAdapter adapter;
-    private ArrayList<ChonMon> ds;
+    private ArrayList<ChonMon> dsChonMon;
 
     private Button btnHuy;
     private Button btnCat;
     private Button btnThuTien;
 
     private Spinner mySpinner;
-    private ArrayList<String> dsNhanVien;
+    private ArrayList<NhanVien> dsNhanVien;
+    private ArrayList<String> dsTenNhanVien;
     private ArrayAdapter adapterNhanVien;
 
     private Intent intent;
@@ -73,7 +77,7 @@ public class ChonMonActivity extends AppCompatActivity {
         isBanMoi = intent.getBooleanExtra(MainActivity.INTENT_BANMOI, false);
 
         lvChonMon = (ListView) findViewById(R.id.lvChonMon);
-        ds = new ArrayList<>();
+        dsChonMon = new ArrayList<>();
 
 
         /*
@@ -90,21 +94,30 @@ public class ChonMonActivity extends AppCompatActivity {
         } else {
             loadThucDonChoBanCoKhach();
         }
-        adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, ds);
+        adapter = new ChonMonAdapter(this, R.layout.item_chon_mon, dsChonMon);
         lvChonMon.setAdapter(adapter);
 
+        dsNhanVien = loadDanhSachNhanVien();
+        dsTenNhanVien = new ArrayList<>();
+        for (int i = 0; i < dsNhanVien.size(); i++) {
+            dsTenNhanVien.add(dsNhanVien.get(i).getTenNhanVien());
+        }
         mySpinner = (Spinner) findViewById(R.id.spinnerNhanVien);
-        dsNhanVien = loadDanhSachTenNhanVien();
-        adapterNhanVien = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dsNhanVien);
+        adapterNhanVien = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dsTenNhanVien);
         adapterNhanVien.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mySpinner.setAdapter(adapterNhanVien);
     }
 
-    private ArrayList<String> loadDanhSachTenNhanVien() {
-        ArrayList<String> ds = new ArrayList<>();
-        Cursor cursor = MainActivity.db.getData("SELECT TenNhanVien FROM NHANVIEN");
+    private ArrayList<NhanVien> loadDanhSachNhanVien() {
+        ArrayList<NhanVien> ds = new ArrayList<>();
+        Cursor cursor = MainActivity.db.getData("SELECT * FROM NHANVIEN");
         while (cursor.moveToNext()) {
-            ds.add(cursor.getString(0));
+            NhanVien nv = new NhanVien();
+            int manv = cursor.getInt(0);
+            nv.setMaNv(manv);
+            String tenNV = cursor.getString(1);
+            nv.setTenNhanVien(tenNV);
+            ds.add(nv);
         }
         return ds;
     }
@@ -116,34 +129,35 @@ public class ChonMonActivity extends AppCompatActivity {
             return;
         }
         maHoaDon = cursor.getInt(0);
-//        cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
-//                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
-//                "ON m.MaMonAn = c.MaMonAn WHERE c.MaHoaDon IS NULL OR c.MaHoaDon = " + maHoaDon);
         cursor = db.getData("SELECT *\n" +
                 "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
                 "ON m.MaMonAn = c.MaMonAn\n" +
                 "WHERE m.ConHang = 1");
-        ds = docDuLieuTuCursor(cursor);
+        dsChonMon = docDuLieuTuCursor(cursor);
     }
 
     private void loadThucDonChoBanMoi() {
-        Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
-                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
-                "ON m.MaMonAn = c.MaMonAn");
-        //ds = docDuLieuTuCursor(cursor);
+        Cursor cursor = db.getData("SELECT * FROM MonAn WHERE ConHang = 1");
+        dsChonMon = docDuLieuTuCursor(cursor);
     }
-    
+
     private ArrayList<ChonMon> docDuLieuTuCursor(Cursor cursor) {
         ArrayList<ChonMon> arr = new ArrayList<>();
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
+            String ten = cursor.getString(1);
             long gia = cursor.getLong(2);
             byte[] hinhAnh = cursor.getBlob(5);
-            String ten = cursor.getString(1);
+
             // Kiem tra xem mahoadon khi truy van co bang mahoadon cua bang an hien tai khong
             // Neu co thi lay ra so luong, con khong thi soluong = 0
-            int soLuong = cursor.getInt(6) == maHoaDon ? cursor.getInt(8) : 0;
-            arr.add(new ChonMon(id, ten,gia, soLuong, hinhAnh));
+            int soLuong;
+            if (isBanMoi) {
+                soLuong = 0;
+            } else {
+                soLuong = cursor.getInt(6) == maHoaDon ? cursor.getInt(8) : 0;
+            }
+            arr.add(new ChonMon(id, ten, gia, soLuong, hinhAnh));
         }
         return arr;
     }
@@ -173,6 +187,34 @@ public class ChonMonActivity extends AppCompatActivity {
 
     //region MyFunction
     private void xuLyCat() {
+        int position = (int) mySpinner.getSelectedItemId();
+        int maNV = dsNhanVien.get(position).getMaNv();
+        if (isBanMoi) {
+            ContentValues banAnValues = new ContentValues();
+            banAnValues.put("SoNguoi", banAn.getSoNguoi());
+            Singleton.getInstance().database.update("BanAn", banAnValues, "SoBan = " + banAn.getSoBan(), null);
+
+            ContentValues hoaDonValues = new ContentValues();
+            hoaDonValues.put("MaBanAn", banAn.getSoBan());
+            hoaDonValues.put("DaThanhToan", 0);
+            hoaDonValues.put("KhuyenMai", 0);
+            hoaDonValues.put("MaNV", maNV);
+            Singleton.getInstance().database.insert("HoaDon", null, hoaDonValues);
+
+            for (ChonMon chonMon : dsChonMon) {
+                if (chonMon.getSoLuong() > 0) {
+                    ContentValues chiTietValues = new ContentValues();
+
+                    chiTietValues.put("MaHoaDon", maHoaDon);
+                    chiTietValues.put("MaMonAn", chonMon.getId());
+                    chiTietValues.put("SoLuong", chonMon.getSoLuong());
+                    chiTietValues.put("DonGia", chonMon.getGia());
+
+                    Singleton.getInstance().database.insert("ChiTietHoaDon", null, chiTietValues);
+                }
+            }
+        }
+        onBackPressed();
 //        if (isBanMoi) {
 //            //Ban moi, tao hoa don moi, cap nhat so nguoi cho ban an, tao chitiethoadon moi tuong ung
 //            ContentValues hoaDonValues = new ContentValues();
@@ -238,6 +280,11 @@ public class ChonMonActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     //endregion
