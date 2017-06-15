@@ -35,7 +35,10 @@ public class ChonMonActivity extends AppCompatActivity {
     private Button btnHuy;
     private Button btnCat;
     private Button btnThuTien;
+
     private Spinner mySpinner;
+    private ArrayList<String> dsNhanVien;
+    private ArrayAdapter adapterNhanVien;
 
     private Intent intent;
     private BanAn banAn;
@@ -91,10 +94,10 @@ public class ChonMonActivity extends AppCompatActivity {
         lvChonMon.setAdapter(adapter);
 
         mySpinner = (Spinner) findViewById(R.id.spinnerNhanVien);
-        ArrayList<String> dsNhanVien = loadDanhSachTenNhanVien();
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dsNhanVien);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        mySpinner.setAdapter(adapter);
+        dsNhanVien = loadDanhSachTenNhanVien();
+        adapterNhanVien = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dsNhanVien);
+        adapterNhanVien.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        mySpinner.setAdapter(adapterNhanVien);
     }
 
     private ArrayList<String> loadDanhSachTenNhanVien() {
@@ -113,9 +116,13 @@ public class ChonMonActivity extends AppCompatActivity {
             return;
         }
         maHoaDon = cursor.getInt(0);
-        cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
+//        cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
+//                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
+//                "ON m.MaMonAn = c.MaMonAn WHERE c.MaHoaDon IS NULL OR c.MaHoaDon = " + maHoaDon);
+        cursor = db.getData("SELECT *\n" +
                 "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
-                "ON m.MaMonAn = c.MaMonAn WHERE c.MaHoaDon IS NULL OR c.MaHoaDon = " + maHoaDon);
+                "ON m.MaMonAn = c.MaMonAn\n" +
+                "WHERE m.ConHang = 1");
         ds = docDuLieuTuCursor(cursor);
     }
 
@@ -123,21 +130,20 @@ public class ChonMonActivity extends AppCompatActivity {
         Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.ConHang, m.HinhAnh, c.SoLuong\n" +
                 "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
                 "ON m.MaMonAn = c.MaMonAn");
-        ds = docDuLieuTuCursor(cursor);
+        //ds = docDuLieuTuCursor(cursor);
     }
     
     private ArrayList<ChonMon> docDuLieuTuCursor(Cursor cursor) {
         ArrayList<ChonMon> arr = new ArrayList<>();
         while (cursor.moveToNext()) {
-            boolean isConHang = cursor.getString(3).equals("1");
-            if (isConHang) {
-                int maMonAn = cursor.getInt(0);
-                String tenMonAn = cursor.getString(1);
-                long gia = cursor.getLong(2);
-                byte[] hinhAnh = cursor.getBlob(4);
-                int soLuong = cursor.getInt(5);
-                arr.add(new ChonMon(maMonAn, tenMonAn, gia, soLuong, hinhAnh));
-            }
+            int id = cursor.getInt(0);
+            long gia = cursor.getLong(2);
+            byte[] hinhAnh = cursor.getBlob(5);
+            String ten = cursor.getString(1);
+            // Kiem tra xem mahoadon khi truy van co bang mahoadon cua bang an hien tai khong
+            // Neu co thi lay ra so luong, con khong thi soluong = 0
+            int soLuong = cursor.getInt(6) == maHoaDon ? cursor.getInt(8) : 0;
+            arr.add(new ChonMon(id, ten,gia, soLuong, hinhAnh));
         }
         return arr;
     }

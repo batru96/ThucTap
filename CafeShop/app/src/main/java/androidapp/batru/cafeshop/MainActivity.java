@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     void debug() {
-        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(2, 2, 5, 25000)");
-        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(2, 3, 10, 10000)");
+        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 14, 3, 75000)");
+        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 10, 7, 100000)");
 
         Cursor cursor = db.getData("SELECT * FROM BanAn");
         Log.v(TAG, "------------------");
