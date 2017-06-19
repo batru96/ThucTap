@@ -220,8 +220,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     void debug() {
+        //db.queryData("UPDATE BANAN SET SONGUOI = 3 WHERE SOBAN = 2");
         //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 14, 3, 75000)");
         //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 10, 7, 100000)");
+        //db.queryData("INSERT INTO HOADON VALUES(1, 2, 2, 0, 10, NULL)");
+        //db.queryData("INSERT INTO CHITIETHOADON VALUES(1, 4, 5, 100000)");
+        //db.queryData("INSERT INTO CHITIETHOADON VALUES(1, 1, 5, 260000)");
+
 
         Cursor cursor = db.getData("SELECT * FROM BanAn");
         Log.v(TAG, "------------------");

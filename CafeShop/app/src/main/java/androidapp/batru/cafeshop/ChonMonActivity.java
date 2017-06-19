@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import adapter.ChonMonAdapter;
 import model.BanAn;
@@ -129,11 +131,43 @@ public class ChonMonActivity extends AppCompatActivity {
             return;
         }
         maHoaDon = cursor.getInt(0);
-        cursor = db.getData("SELECT *\n" +
+        /*cursor = db.getData("SELECT *\n" +
                 "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
                 "ON m.MaMonAn = c.MaMonAn\n" +
                 "WHERE m.ConHang = 1");
-        dsChonMon = docDuLieuTuCursor(cursor);
+        dsChonMon = docDuLieuTuCursor(cursor);*/
+        cursor = db.getData("SELECT * FROM CHITIETHOADON WHERE MAHOADON = " + maHoaDon);
+        // lay ra mamonan va soluong monan
+        HashMap map = new HashMap();
+        while(cursor.moveToNext()) {
+            Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
+            map.put(cursor.getInt(1), cursor.getInt(2));
+        }
+        cursor = db.getData("SELECT * FROM MONAN WHERE ConHang = 1");
+        while(cursor.moveToNext()) {
+            ChonMon chonMon = new ChonMon();
+
+            // Kiem tra ma mon an co bi ton tai trong danh sach tren khong. Neu co thi thay doi so luong.
+            int maMon = cursor.getInt(0);
+            chonMon.setId(maMon);
+
+            int soluong = 0;
+            if (map.containsKey(maMon)) {
+                soluong = (int) map.get(maMon);
+            }
+            chonMon.setSoLuong(soluong);
+
+            String tenmonan = cursor.getString(1);
+            chonMon.setTen(tenmonan);
+
+            long gia = cursor.getLong(2);
+            chonMon.setGia(gia);
+
+            byte[] hinhanh = cursor.getBlob(5);
+            chonMon.setHinhAnh(hinhanh);
+
+            dsChonMon.add(chonMon);
+        }
     }
 
     private void loadThucDonChoBanMoi() {
