@@ -36,6 +36,7 @@ public class ChonMonActivity extends AppCompatActivity {
     private ListView lvChonMon;
     private ChonMonAdapter adapter;
     private ArrayList<ChonMon> dsChonMon;
+    private ArrayList<ChonMon> dsChonMonGoc;
 
     private Button btnHuy;
     private Button btnCat;
@@ -50,7 +51,7 @@ public class ChonMonActivity extends AppCompatActivity {
     private BanAn banAn;
     private boolean isBanMoi;
 
-    private int maHoaDon;
+    private int maHoaDonBanCoKhach;
     //endregion
 
     @Override
@@ -80,7 +81,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
         lvChonMon = (ListView) findViewById(R.id.lvChonMon);
         dsChonMon = new ArrayList<>();
-
+        dsChonMonGoc = new ArrayList<>();
 
         /*
         * Kiem tra xem ban an dang co khach hay khong
@@ -125,57 +126,63 @@ public class ChonMonActivity extends AppCompatActivity {
     }
 
     private void loadThucDonChoBanCoKhach() {
-        Cursor cursor = db.getData("SELECT h.MaHoaDon FROM BanAn b JOIN HoaDon h ON b.SoBan = h.MaBanAn WHERE h.DaThanhToan = 0 AND h.MaBanAn = " + banAn.getSoBan());
+        Cursor cursor = db.getData("SELECT h.MaHoaDon " +
+                "FROM BanAn b JOIN HoaDon h ON b.SoBan = h.MaBanAn " +
+                "WHERE h.DaThanhToan = 0 AND h.MaBanAn = " + banAn.getSoBan());
         if (!cursor.moveToNext()) {
             Log.d(TAG, "Cursor Failed");
             return;
         }
-        maHoaDon = cursor.getInt(0);
-        /*cursor = db.getData("SELECT *\n" +
-                "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
-                "ON m.MaMonAn = c.MaMonAn\n" +
-                "WHERE m.ConHang = 1");
-        dsChonMon = docDuLieuTuCursor(cursor);*/
-        cursor = db.getData("SELECT * FROM CHITIETHOADON WHERE MAHOADON = " + maHoaDon);
+        maHoaDonBanCoKhach = cursor.getInt(0);
+
+        cursor = db.getData("SELECT * FROM ChiTietHoaDon WHERE MaHoaDon = " + maHoaDonBanCoKhach);
         // lay ra mamonan va soluong monan
         HashMap map = new HashMap();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
             map.put(cursor.getInt(1), cursor.getInt(2));
         }
         cursor = db.getData("SELECT * FROM MONAN WHERE ConHang = 1");
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             ChonMon chonMon = new ChonMon();
+            ChonMon chonMonGoc = new ChonMon();
 
             // Kiem tra ma mon an co bi ton tai trong danh sach tren khong. Neu co thi thay doi so luong.
             int maMon = cursor.getInt(0);
             chonMon.setId(maMon);
+            chonMonGoc.setId(maMon);
 
             int soluong = 0;
             if (map.containsKey(maMon)) {
                 soluong = (int) map.get(maMon);
             }
             chonMon.setSoLuong(soluong);
+            chonMonGoc.setSoLuong(soluong);
 
             String tenmonan = cursor.getString(1);
             chonMon.setTen(tenmonan);
+            chonMonGoc.setTen(tenmonan);
 
             long gia = cursor.getLong(2);
             chonMon.setGia(gia);
+            chonMonGoc.setGia(gia);
 
             byte[] hinhanh = cursor.getBlob(5);
             chonMon.setHinhAnh(hinhanh);
+            chonMonGoc.setHinhAnh(hinhanh);
 
             dsChonMon.add(chonMon);
+            // De kiem tra danh sach co bi thay doi hay khong, dung trong khi click cat button
+            dsChonMonGoc.add(chonMonGoc);
         }
     }
 
     private void loadThucDonChoBanMoi() {
         Cursor cursor = db.getData("SELECT * FROM MonAn WHERE ConHang = 1");
-        dsChonMon = docDuLieuTuCursor(cursor);
+        dsChonMon = docDuLieuChoBanMoi(cursor);
     }
 
-    private ArrayList<ChonMon> docDuLieuTuCursor(Cursor cursor) {
+    private ArrayList<ChonMon> docDuLieuChoBanMoi(Cursor cursor) {
         ArrayList<ChonMon> arr = new ArrayList<>();
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
@@ -189,7 +196,7 @@ public class ChonMonActivity extends AppCompatActivity {
             if (isBanMoi) {
                 soLuong = 0;
             } else {
-                soLuong = cursor.getInt(6) == maHoaDon ? cursor.getInt(8) : 0;
+                soLuong = cursor.getInt(6) == maHoaDonBanCoKhach ? cursor.getInt(8) : 0;
             }
             arr.add(new ChonMon(id, ten, gia, soLuong, hinhAnh));
         }
@@ -235,51 +242,70 @@ public class ChonMonActivity extends AppCompatActivity {
             hoaDonValues.put("MaNV", maNV);
             Singleton.getInstance().database.insert("HoaDon", null, hoaDonValues);
 
-            for (ChonMon chonMon : dsChonMon) {
-                if (chonMon.getSoLuong() > 0) {
-                    ContentValues chiTietValues = new ContentValues();
+            Cursor cursor = db.getData("SELECT * FROM HoaDon");
+            if (cursor.moveToLast()) {
+                int maHoaDon = cursor.getInt(0);
+                for (ChonMon chonMon : dsChonMon) {
+                    if (chonMon.getSoLuong() > 0) {
+                        ContentValues chiTietValues = new ContentValues();
 
-                    chiTietValues.put("MaHoaDon", maHoaDon);
-                    chiTietValues.put("MaMonAn", chonMon.getId());
-                    chiTietValues.put("SoLuong", chonMon.getSoLuong());
-                    chiTietValues.put("DonGia", chonMon.getGia());
+                        chiTietValues.put("MaHoaDon", maHoaDon);
+                        chiTietValues.put("MaMonAn", chonMon.getId());
+                        chiTietValues.put("SoLuong", chonMon.getSoLuong());
+                        chiTietValues.put("DonGia", chonMon.getGia());
 
-                    Singleton.getInstance().database.insert("ChiTietHoaDon", null, chiTietValues);
+                        Singleton.getInstance().database.insert("ChiTietHoaDon", null, chiTietValues);
+                    }
                 }
+            } else {
+                Log.v(TAG, "MaHoaDon Failed");
+            }
+        } else {
+            // Neu khong phai la ban moi.
+            // Neu danh sach tren man hinh thay doi so voi danh sach goc
+            if (!isArrayListEquals(dsChonMon, dsChonMonGoc)) {
+                Toast.makeText(this, "Co su khac biet", Toast.LENGTH_SHORT).show();
+                int idx = 0;
+                for (ChonMon chonMon: dsChonMon) {
+                    ChonMon chonMonGoc = dsChonMonGoc.get(idx);
+                    if (!isChonMonEquals(chonMon, chonMonGoc)) {
+                        ContentValues values = new ContentValues();
+                        values.put("MaHoaDon", maHoaDonBanCoKhach);
+                        values.put("MaMonAn", chonMon.getId());
+                        values.put("DonGia", chonMon.getGia());
+                        if (chonMonGoc.getSoLuong() == 0) {
+                            values.put("SoLuong", chonMon.getSoLuong());
+                            Singleton.getInstance().database.insert("ChiTietHoaDon", null, values);
+                        } else {
+                            values.put("SoLuong", chonMon.getSoLuong());
+                            Singleton.getInstance().database.update("ChiTietHoaDon", values, "MaHoaDon = " + maHoaDonBanCoKhach + " AND MaMonAn = " + chonMonGoc.getId(), null);
+                        }
+                    }
+                    idx++;
+                }
+            } else {
+                Toast.makeText(this, "Khong co su khac biet", Toast.LENGTH_SHORT).show();
             }
         }
         onBackPressed();
-//        if (isBanMoi) {
-//            //Ban moi, tao hoa don moi, cap nhat so nguoi cho ban an, tao chitiethoadon moi tuong ung
-//            ContentValues hoaDonValues = new ContentValues();
-//            hoaDonValues.put("MaBanAn", banAn.getSoBan());
-//            hoaDonValues.put("DaThanhToan", 0);
-//            hoaDonValues.put("KhuyenMain", 0);
-//            hoaDonValues.put("MaNV", 1); // Chua lam dang nhap cho nguoi su dung
-//            Singleton.getInstance().database.insert("HoaDon", null, hoaDonValues);
-//
-//            ContentValues banAnValues = new ContentValues();
-//            banAnValues.put("SoNguoi", banAn.getSoNguoi());
-//            long kqAdd = Singleton.getInstance().database.update("BanAn", banAnValues, "SoBan = " + banAn.getSoBan(), null);
-//            Log.v(TAG, "So luong dong add vao table ban an: " + kqAdd);
-//
-//            Cursor cursor = db.getData("SELECT m.MaMonAn, m.TenMonAn, m.DonGia, m.HinhAnh, c.SoLuong\n" +
-//                    "FROM MonAn m LEFT JOIN ChiTietHoaDon c\n" +
-//                    "On m.MaMonAn = c.MaMonAn\n" +
-//                    "WHERE c.MaHoaDon = " + " OR c.MaHoaDon is NULL");
-//            while (cursor.moveToNext()) {
-//                int maMonAn = cursor.getInt(0);
-//                String tenMonAn = cursor.getString(1);
-//                long donGia = cursor.getLong(2);
-//                byte[] hinhAnh = cursor.getBlob(3);
-//                int soLuong = cursor.getInt(4);
-//                ds.add(new ChonMon(maMonAn, tenMonAn, donGia, soLuong, hinhAnh));
-//            }
-//            startActivity(new Intent(this, MainActivity.class));
-//
-//        } else {
-//            // Khi ban dang co khach, chi cap nhat lai chitiethoadon
-//        }
+    }
+
+    private boolean isChonMonEquals(ChonMon c1, ChonMon c2) {
+        if (c1.getSoLuong() != c2.getSoLuong()) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isArrayListEquals(ArrayList<ChonMon> ds1, ArrayList<ChonMon> ds2) {
+        for (int i = 0; i < ds1.size(); i++) {
+            ChonMon chon1 = ds1.get(i);
+            ChonMon chon2 = ds2.get(i);
+            if ((chon1.getId() != chon2.getId()) || (chon1.getSoLuong() != chon2.getSoLuong()) || (chon1.getGia() != chon2.getGia() || (chon1.getHinhAnh() != chon2.getHinhAnh() || (chon1.getTen() != chon2.getTen())))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void xuLyHuy() {
@@ -289,7 +315,6 @@ public class ChonMonActivity extends AppCompatActivity {
     private void xuLyThuTien() {
         Toast.makeText(this, "THU TIEN NE!!!", Toast.LENGTH_SHORT).show();
     }
-
     //endregion
 
     //region Override Function
@@ -320,6 +345,5 @@ public class ChonMonActivity extends AppCompatActivity {
     public void onBackPressed() {
         startActivity(new Intent(this, MainActivity.class));
     }
-
     //endregion
 }

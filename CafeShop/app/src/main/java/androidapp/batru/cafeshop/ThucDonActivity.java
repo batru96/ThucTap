@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import model.MonAn;
 import static androidapp.batru.cafeshop.MainActivity.db;
 
 public class ThucDonActivity extends AppCompatActivity{
+
+    private final String TAG = "THUCDON_ACTIVITY";
 
     private ListView lvThucDon;
     private ArrayList<MonAn> dsMonAn;
@@ -86,32 +89,35 @@ public class ThucDonActivity extends AppCompatActivity{
         dialog.show();
     }
 
-
     private ArrayList<MonAn> docDuLieuTuDatabase() {
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         Cursor cursor = db.getData("SELECT * FROM MonAn");
         while (cursor.moveToNext()) {
-            MonAn monAn = new MonAn();
+            try {
+                MonAn monAn = new MonAn();
 
-            int id = cursor.getInt(0);
-            monAn.setId(id);
+                int id = cursor.getInt(0);
+                monAn.setId(id);
 
-            String ten = cursor.getString(1);
-            monAn.setTen(ten);
+                String ten = cursor.getString(1);
+                monAn.setTen(ten);
 
-            long donGia = cursor.getLong(2);
-            monAn.setGia(donGia);
+                long donGia = cursor.getLong(2);
+                monAn.setGia(donGia);
 
-            String donVi = cursor.getString(3);
-            monAn.setDonVi(donVi);
+                String donVi = cursor.getString(3);
+                monAn.setDonVi(donVi);
 
-            boolean isConBan = cursor.getString(4).equals("1");
-            monAn.setConHang(isConBan);
+                boolean isConBan = cursor.getString(4).equals("1");
+                monAn.setConHang(isConBan);
 
-            byte[] hinhAnh = cursor.getBlob(5);
-            monAn.setHinhAnh(hinhAnh);
+                byte[] hinhAnh = cursor.getBlob(5);
+                monAn.setHinhAnh(hinhAnh);
 
-            dsMonAn.add(monAn);
+                dsMonAn.add(monAn);
+            }catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
         }
         return dsMonAn;
     }

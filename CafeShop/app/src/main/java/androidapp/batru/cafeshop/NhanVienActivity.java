@@ -7,20 +7,26 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adapter.NhanVienAdapter;
+import database.Database;
 import model.NhanVien;
+import singleton.Singleton;
 
 import static androidapp.batru.cafeshop.MainActivity.db;
 
 public class NhanVienActivity extends AppCompatActivity {
+
+    private final String TAG = "NHANVIEN_ACTIVITY";
 
     //region properties
     private ListView lvNhanVien;
@@ -46,9 +52,6 @@ public class NhanVienActivity extends AppCompatActivity {
 
         lvNhanVien = (ListView) findViewById(R.id.nhanVienListView);
         ds = new ArrayList<>();
-        ds = docDuLieuTuDatabase();
-        adapter = new NhanVienAdapter(this, R.layout.item_nhan_vien, ds);
-        lvNhanVien.setAdapter(adapter);
 
         lvNhanVien.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -98,23 +101,28 @@ public class NhanVienActivity extends AppCompatActivity {
 
     private ArrayList<NhanVien> docDuLieuTuDatabase() {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-        Cursor cursor = db.getData("SELECT * FROM NhanVien");
+        String query = "SELECT * FROM NhanVien";
+        Cursor cursor = db.getData(query);
         while (cursor.moveToNext()) {
-            NhanVien nv = new NhanVien();
+            try {
+                NhanVien nv = new NhanVien();
 
-            int id = cursor.getInt(0);
-            nv.setMaNv(id);
+                int id = cursor.getInt(0);
+                nv.setMaNv(id);
 
-            String ten = cursor.getString(1);
-            nv.setTenNhanVien(ten);
+                String ten = cursor.getString(1);
+                nv.setTenNhanVien(ten);
 
-            String ngayLamViec = cursor.getString(2);
-            nv.setNgayLamViec(ngayLamViec);
+                String ngayLamViec = cursor.getString(2);
+                nv.setNgayLamViec(ngayLamViec);
 
-            byte[] hinhAnh = cursor.getBlob(3);
-            nv.setHinhAnh(hinhAnh);
+                byte[] hinhAnh = cursor.getBlob(3);
+                nv.setHinhAnh(hinhAnh);
 
-            dsNhanVien.add(nv);
+                dsNhanVien.add(nv);
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
         }
         return dsNhanVien;
     }
@@ -140,5 +148,13 @@ public class NhanVienActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ds = docDuLieuTuDatabase();
+        adapter = new NhanVienAdapter(this, R.layout.item_nhan_vien, ds);
+        lvNhanVien.setAdapter(adapter);
     }
 }

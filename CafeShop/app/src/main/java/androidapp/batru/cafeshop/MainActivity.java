@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 "TenNhanVien VARCHAR,\n" +
                 "NgayLamViec DATETIME DEFAULT CURRENT_DATE,\n" +
                 "HinhAnh BLOB\n" +
-                ");\n");
+                ");");
 
         db.queryData("CREATE TABLE IF NOT EXISTS BanAn\n" +
                 "(\n" +
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
                 "MaNV INTEGER,\n" +
                 "MaBanAn INTEGER,\n" +
                 "DaThanhToan BOOL,\n" +
-                "KhuyenMain INTEGER,\n" +
+                "KhuyenMai INTEGER,\n" +
                 "ThoiGian DATETIME DEFAULT CURRENT_TIME,\n" +
                 "FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNhanVien),\n" +
                 "FOREIGN KEY (MaBanAn) REFERENCES BanAn(SoBan)\n" +
@@ -214,22 +214,14 @@ public class MainActivity extends AppCompatActivity
                 "PRIMARY KEY (MaHoaDon, MaMonAn),\n" +
                 "FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon),\n" +
                 "FOREIGN KEY (MaMonAn) REFERENCES MonAn(MaMonAn)\n" +
-                ")");
-
-        //themDuLieuBanAn();
+                ");");
     }
 
     void debug() {
-        //db.queryData("UPDATE BANAN SET SONGUOI = 3 WHERE SOBAN = 2");
-        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 14, 3, 75000)");
-        //db.queryData("INSERT INTO ChiTietHoaDon VALUES(1, 10, 7, 100000)");
-        //db.queryData("INSERT INTO HOADON VALUES(1, 2, 2, 0, 10, NULL)");
-        //db.queryData("INSERT INTO CHITIETHOADON VALUES(1, 4, 5, 100000)");
-        //db.queryData("INSERT INTO CHITIETHOADON VALUES(1, 1, 5, 260000)");
-
+        db.queryData("DELETE FROM ChiTietHoaDon WHERE SoLuong = 0");
 
         Cursor cursor = db.getData("SELECT * FROM BanAn");
-        Log.v(TAG, "------------------");
+        Log.v(TAG, "---------Ban An---------");
         while (cursor.moveToNext()) {
             Log.v(TAG, "SoBan: " + cursor.getInt(0) + " || SoNguoi: " + cursor.getInt(1));
         }
