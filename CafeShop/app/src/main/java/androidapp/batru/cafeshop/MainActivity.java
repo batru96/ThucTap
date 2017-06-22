@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity
                 ");");
     }
 
-    void debug() {
+    public void debug() {
         db.queryData("DELETE FROM ChiTietHoaDon WHERE SoLuong = 0");
 
         Cursor cursor = db.getData("SELECT * FROM BanAn");

@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -136,10 +137,9 @@ public class ChonMonActivity extends AppCompatActivity {
         maHoaDonBanCoKhach = cursor.getInt(0);
 
         cursor = db.getData("SELECT * FROM ChiTietHoaDon WHERE MaHoaDon = " + maHoaDonBanCoKhach);
-        // lay ra mamonan va soluong monan
+        // Lấy ra mã món ăn và số lượng món ăn
         HashMap map = new HashMap();
         while (cursor.moveToNext()) {
-            Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
             map.put(cursor.getInt(1), cursor.getInt(2));
         }
         cursor = db.getData("SELECT * FROM MONAN WHERE ConHang = 1");
@@ -147,7 +147,8 @@ public class ChonMonActivity extends AppCompatActivity {
             ChonMon chonMon = new ChonMon();
             ChonMon chonMonGoc = new ChonMon();
 
-            // Kiem tra ma mon an co bi ton tai trong danh sach tren khong. Neu co thi thay doi so luong.
+            // Kiểm tra món ăn có bị tồn tại trong danh sách trên không.
+            // Nếu có thì thay đổi số lượng
             int maMon = cursor.getInt(0);
             chonMon.setId(maMon);
             chonMonGoc.setId(maMon);
@@ -172,7 +173,7 @@ public class ChonMonActivity extends AppCompatActivity {
             chonMonGoc.setHinhAnh(hinhanh);
 
             dsChonMon.add(chonMon);
-            // De kiem tra danh sach co bi thay doi hay khong, dung trong khi click cat button
+            // Để kiểm tra danh sách có bị thay đổi hay không, dùng trong khi click vào button cất
             dsChonMonGoc.add(chonMonGoc);
         }
     }
@@ -228,8 +229,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
     //region MyFunction
     private void xuLyCat() {
-        int position = (int) mySpinner.getSelectedItemId();
-        int maNV = dsNhanVien.get(position).getMaNv();
+        int maNV = getMaNVFromSpinner();
         if (isBanMoi) {
             ContentValues banAnValues = new ContentValues();
             banAnValues.put("SoNguoi", banAn.getSoNguoi());
@@ -261,33 +261,42 @@ public class ChonMonActivity extends AppCompatActivity {
                 Log.v(TAG, "MaHoaDon Failed");
             }
         } else {
-            // Neu khong phai la ban moi.
-            // Neu danh sach tren man hinh thay doi so voi danh sach goc
-            if (!isArrayListEquals(dsChonMon, dsChonMonGoc)) {
-                Toast.makeText(this, "Co su khac biet", Toast.LENGTH_SHORT).show();
-                int idx = 0;
-                for (ChonMon chonMon: dsChonMon) {
-                    ChonMon chonMonGoc = dsChonMonGoc.get(idx);
-                    if (!isChonMonEquals(chonMon, chonMonGoc)) {
-                        ContentValues values = new ContentValues();
-                        values.put("MaHoaDon", maHoaDonBanCoKhach);
-                        values.put("MaMonAn", chonMon.getId());
-                        values.put("DonGia", chonMon.getGia());
-                        if (chonMonGoc.getSoLuong() == 0) {
-                            values.put("SoLuong", chonMon.getSoLuong());
-                            Singleton.getInstance().database.insert("ChiTietHoaDon", null, values);
-                        } else {
-                            values.put("SoLuong", chonMon.getSoLuong());
-                            Singleton.getInstance().database.update("ChiTietHoaDon", values, "MaHoaDon = " + maHoaDonBanCoKhach + " AND MaMonAn = " + chonMonGoc.getId(), null);
-                        }
-                    }
-                    idx++;
-                }
-            } else {
-                Toast.makeText(this, "Khong co su khac biet", Toast.LENGTH_SHORT).show();
-            }
+            capNhatDuLieuChoBanDaCoKhach(maNV);
         }
         onBackPressed();
+    }
+
+    private int getMaNVFromSpinner() {
+        int position = (int) mySpinner.getSelectedItemId();
+        return dsNhanVien.get(position).getMaNv();
+    }
+
+    private void capNhatDuLieuChoBanDaCoKhach(int maNV) {
+        // Neu khong phai la ban moi.
+        // Neu danh sach tren man hinh thay doi so voi danh sach goc
+        if (!isArrayListEquals(dsChonMon, dsChonMonGoc)) {
+            int idx = 0;
+            for (ChonMon chonMon: dsChonMon) {
+                ChonMon chonMonGoc = dsChonMonGoc.get(idx);
+                if (!isChonMonEquals(chonMon, chonMonGoc)) {
+                    ContentValues values = new ContentValues();
+                    values.put("MaHoaDon", maHoaDonBanCoKhach);
+                    values.put("MaMonAn", chonMon.getId());
+                    values.put("DonGia", chonMon.getGia());
+                    if (chonMonGoc.getSoLuong() == 0) {
+                        values.put("SoLuong", chonMon.getSoLuong());
+                        Singleton.getInstance().database.insert("ChiTietHoaDon", null, values);
+                    } else {
+                        values.put("SoLuong", chonMon.getSoLuong());
+                        Singleton.getInstance().database.update("ChiTietHoaDon", values, "MaHoaDon = " + maHoaDonBanCoKhach + " AND MaMonAn = " + chonMonGoc.getId(), null);
+                    }
+                }
+                idx++;
+            }
+        }
+        ContentValues hoaDonValues = new ContentValues();
+        hoaDonValues.put("MaNV", maNV);
+        Singleton.getInstance().database.update("HoaDon", hoaDonValues, "MaHoaDon = " + maHoaDonBanCoKhach, null);
     }
 
     private boolean isChonMonEquals(ChonMon c1, ChonMon c2) {
@@ -313,7 +322,26 @@ public class ChonMonActivity extends AppCompatActivity {
     }
 
     private void xuLyThuTien() {
-        Toast.makeText(this, "THU TIEN NE!!!", Toast.LENGTH_SHORT).show();
+        if (isBanMoi) {
+            Toast.makeText(this, "Bàn này chưa được tạo hóa đơn. Vui lòng kiểm tra lại!", Toast.LENGTH_SHORT).show();
+        } else {
+            /*
+             * Phần này để sự dụng cho việc nếu có thay đổi ở danh sách, mà không click vào
+             * button cất mà bấm luôn vào button thu tiền
+             */
+            capNhatDuLieuChoBanDaCoKhach(getMaNVFromSpinner());
+
+            //MainActivity.db.queryData("UPDATE HoaDon SET DaThanhToan = 1 WHERE MaHoaDon = " + maHoaDonBanCoKhach);
+            //MainActivity.db.queryData("UPDATE BanAn SET SoNguoi = 0 WHERE SoBan = " + banAn.getSoBan());
+
+            Intent intent = new Intent(this, HoaDonActivity.class);
+            startActivity(intent);
+            Cursor cursor = MainActivity.db.getData("SELECT * FROM ChiTietHoaDon WHERE MaHoaDon = " + maHoaDonBanCoKhach);
+            while (cursor.moveToNext()) {
+                //Tạo fragment hóa đơn
+                Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
+            }
+        }
     }
     //endregion
 

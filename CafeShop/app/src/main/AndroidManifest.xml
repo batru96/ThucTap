@@ -41,7 +41,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-
         </activity>
         <activity android:name=".QuanLyNhanVienActivity"
             android:windowSoftInputMode="adjustUnspecified">
@@ -49,6 +48,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NhanVienActivity" />
         </activity>
+        <activity android:name=".HoaDonActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ChonMonActivity" />
+        </activity>
+
     </application>
 
 </manifest>
