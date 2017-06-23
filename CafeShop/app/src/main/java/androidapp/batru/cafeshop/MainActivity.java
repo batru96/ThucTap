@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,12 +16,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adapter.BanAnAdapter;
 import database.Database;
 import model.BanAn;
+import singleton.Singleton;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -172,7 +175,8 @@ public class MainActivity extends AppCompatActivity
                 "MaNhanVien INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "TenNhanVien VARCHAR,\n" +
                 "NgayLamViec DATETIME DEFAULT CURRENT_DATE,\n" +
-                "HinhAnh BLOB\n" +
+                "HinhAnh BLOB,\n" +
+                "ConLamViec BOOL" +
                 ");");
 
         db.queryData("CREATE TABLE IF NOT EXISTS BanAn\n" +
@@ -225,7 +229,7 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "---------NHANVIEN---------");
         cursor = db.getData("SELECT * FROM NhanVien");
         while (cursor.moveToNext()) {
-            Log.v(TAG, "MaNhanVien: " + cursor.getInt(0) + " || TenNhanVien: " + cursor.getString(1) + " || NgayLamViec" + cursor.getString(2) + "|| HinhAnh: " + cursor.getBlob(3));
+            Log.v(TAG, "MaNhanVien: " + cursor.getInt(0) + " || TenNhanVien: " + cursor.getString(1) + " || NgayLamViec" + cursor.getString(2) + "|| HinhAnh: " + cursor.getBlob(3) + " || ConLamViec: " + cursor.getInt(4));
         }
 
         Log.v(TAG, "---------MonAn-------------");
@@ -250,7 +254,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        db.close();
+        Toast.makeText(this, "DESTROY", Toast.LENGTH_SHORT).show();
+        //db.close();
     }
 
     //endregion

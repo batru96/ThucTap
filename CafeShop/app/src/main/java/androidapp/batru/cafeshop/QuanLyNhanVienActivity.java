@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,7 +35,6 @@ import static androidapp.batru.cafeshop.MainActivity.db;
 public class QuanLyNhanVienActivity extends AppCompatActivity {
 
     //region properties
-    private final int REQUEST_CAMERA_CODE = 112;
     private final int REQUEST_GALARY_CODE = 113;
     private final String TAG = "QuanLyNhanVienActivity";
 
@@ -42,6 +42,8 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
     private EditText edtTen;
     private TextView txtNgayLamViec, txtTitle;
     private Button btnChonNgayLam, btnXong;
+    private CheckBox ckNghiViec;
+    private TextView txtTrangThai;
 
     SimpleDateFormat formater;
 
@@ -61,6 +63,48 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
     }
 
     //region myfunction
+    private void initControls() {
+        intent = getIntent();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Quản lý nhân viên");
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        imgNhanVien = (ImageView) findViewById(R.id.imageNhanVien);
+        edtTen = (EditText) findViewById(R.id.editTenNhanVien);
+        txtNgayLamViec = (TextView) findViewById(R.id.ngayLamViecText);
+        txtTitle = (TextView) findViewById(R.id.textTitle);
+        btnChonNgayLam = (Button) findViewById(R.id.buttonNgayLam);
+        btnXong = (Button) findViewById(R.id.buttonXong);
+        ckNghiViec = (CheckBox) findViewById(R.id.checkboxNghiViec);
+        txtTrangThai = (TextView) findViewById(R.id.txtTrangThai);
+
+        formater = new SimpleDateFormat("dd/MM/yyyy");
+
+        nhiemVu = intent.getStringExtra("FROM");
+
+        if (nhiemVu.equals("Sua")) {
+            ckNghiViec.setVisibility(View.VISIBLE);
+            NhanVien nv = (NhanVien) intent.getSerializableExtra("NhanVien");
+            edtTen.setText(nv.getTenNhanVien());
+            txtNgayLamViec.setText(nv.getNgayLamViec());
+            txtTitle.setText("Cập nhật thông tin");
+            maNhanVienFromIntent = nv.getMaNv();
+            ckNghiViec.setChecked(nv.isNghiViec());
+
+            Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(nv.getHinhAnh());
+            imgNhanVien.setImageBitmap(bitmap);
+
+        } else if (nhiemVu.equals("Them")) {
+            ckNghiViec.setVisibility(View.GONE);
+            txtTrangThai.setVisibility(View.GONE);
+            txtTitle.setText("Thêm nhân viên");
+            txtNgayLamViec.setText(formater.format(Calendar.getInstance().getTime()));
+        }
+    }
 
     private void ganEvents() {
         btnChonNgayLam.setOnClickListener(new View.OnClickListener() {
@@ -84,13 +128,6 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
             }
         });
 
-        imgNhanVien.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                longClickHinhAnh();
-                return true;
-            }
-        });
     }
 
     private void xuLyButtonXongClicked() {
@@ -98,8 +135,6 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.toasl_nhap_lieu), Toast.LENGTH_SHORT).show();
             return;
         }
-        SQLiteDatabase database = db.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put("TenNhanVien", edtTen.getText().toString());
         values.put("NgayLamViec", txtNgayLamViec.getText().toString());
@@ -112,20 +147,17 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         values.put("HinhAnh", hinhAnh);
 
         if (nhiemVu.equals("Them")) {
-            database.insert("NhanVien", null, values);
+            values.put("ConLamViec", 1);
+            Singleton.getInstance().database.insert("NhanVien", null, values);
         } else if (nhiemVu.equals("Sua")) {
-            database.update("NhanVien", values, "MaNhanVien = " + maNhanVienFromIntent, null);
+            values.put("ConLamViec", !ckNghiViec.isChecked());
+            Singleton.getInstance().database.update("NhanVien", values, "MaNhanVien = " + maNhanVienFromIntent, null);
         }
         chuyenVeParentActivity();
     }
 
     private void chuyenVeParentActivity() {
         startActivity(new Intent(this, NhanVienActivity.class));
-    }
-
-    private void longClickHinhAnh() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA_CODE);
     }
 
     private void clickHinhAnh() {
@@ -150,42 +182,6 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void initControls() {
-        intent = getIntent();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Quản lý nhân viên");
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        imgNhanVien = (ImageView) findViewById(R.id.imageNhanVien);
-        edtTen = (EditText) findViewById(R.id.editTenNhanVien);
-        txtNgayLamViec = (TextView) findViewById(R.id.ngayLamViecText);
-        txtTitle = (TextView) findViewById(R.id.textTitle);
-        btnChonNgayLam = (Button) findViewById(R.id.buttonNgayLam);
-        btnXong = (Button) findViewById(R.id.buttonXong);
-
-        formater = new SimpleDateFormat("dd/MM/yyyy");
-
-        nhiemVu = intent.getStringExtra("FROM");
-
-        if (nhiemVu.equals("Sua")) {
-            NhanVien nv = (NhanVien) intent.getSerializableExtra("NhanVien");
-            edtTen.setText(nv.getTenNhanVien());
-            txtNgayLamViec.setText(nv.getNgayLamViec());
-            txtTitle.setText("Cập nhật thông tin");
-            maNhanVienFromIntent = nv.getMaNv();
-
-            Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(nv.getHinhAnh());
-            imgNhanVien.setImageBitmap(bitmap);
-
-        } else if (nhiemVu.equals("Them")) {
-            txtTitle.setText("Thêm nhân viên");
-            txtNgayLamViec.setText(formater.format(Calendar.getInstance().getTime()));
-        }
-    }
 
     //endregion
 
@@ -195,9 +191,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = null;
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA_CODE) {
-                bitmap = (Bitmap) data.getExtras().get("data");
-            } else if (requestCode == REQUEST_GALARY_CODE) {
+            if (requestCode == REQUEST_GALARY_CODE) {
                 try {
                     Uri uri = data.getData();
                     InputStream is = getContentResolver().openInputStream(uri);

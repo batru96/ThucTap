@@ -53,14 +53,6 @@ public class NhanVienActivity extends AppCompatActivity {
         lvNhanVien = (ListView) findViewById(R.id.nhanVienListView);
         ds = new ArrayList<>();
 
-        lvNhanVien.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                xoaItem(position);
-                return true;
-            }
-        });
-
         lvNhanVien.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,27 +69,28 @@ public class NhanVienActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void xoaItem(final int position) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Thông báo");
-        dialog.setMessage("Xác nhận xóa");
-        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                NhanVien nhanvien = ds.get(position);
-                db.queryData("DELETE FROM NhanVien WHERE MaNhanVien = " + nhanvien.getMaNv());
-                ds.remove(position);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        dialog.show();
-    }
+//    private void xoaItem(final int position) {
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//        dialog.setTitle("Thông báo");
+//        dialog.setMessage("Xác nhận xóa");
+//        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                NhanVien nhanvien = ds.get(position);
+//                db.queryData("UPDATE NhanVien SET ConLamViec = 0 WHERE MaNhanVien = " + nhanvien.getMaNv());
+//                ds = docDuLieuTuDatabase();
+//                adapter = new NhanVienAdapter(NhanVienActivity.this, R.layout.item_nhan_vien, ds);
+//                lvNhanVien.setAdapter(adapter);
+//            }
+//        });
+//        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//        dialog.show();
+//    }
 
     private ArrayList<NhanVien> docDuLieuTuDatabase() {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
@@ -118,6 +111,9 @@ public class NhanVienActivity extends AppCompatActivity {
 
                 byte[] hinhAnh = cursor.getBlob(3);
                 nv.setHinhAnh(hinhAnh);
+
+                boolean isConLamViec = cursor.getString(4).equals("1");
+                nv.setNghiViec(!isConLamViec);
 
                 dsNhanVien.add(nv);
             } catch (Exception e) {

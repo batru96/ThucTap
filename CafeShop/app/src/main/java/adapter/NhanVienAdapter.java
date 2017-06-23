@@ -50,6 +50,7 @@ public class NhanVienAdapter extends BaseAdapter {
         ImageView imgHinhAnh = (ImageView) convertView.findViewById(R.id.imageNhanVien);
         TextView txtTen = (TextView) convertView.findViewById(R.id.nhanVienTenText);
         TextView txtNgayLam = (TextView) convertView.findViewById(R.id.nhanVienDateText);
+        TextView txtNghiViec = (TextView) convertView.findViewById(R.id.txtNghiViec);
 
         NhanVien nhanVien = ds.get(position);
         if (nhanVien != null) {
@@ -58,6 +59,9 @@ public class NhanVienAdapter extends BaseAdapter {
             if (nhanVien.getHinhAnh() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(nhanVien.getHinhAnh(), 0, nhanVien.getHinhAnh().length);
                 imgHinhAnh.setImageBitmap(bitmap);
+            }
+            if (nhanVien.isNghiViec()) {
+                txtNghiViec.setVisibility(View.VISIBLE);
             }
         }
 
