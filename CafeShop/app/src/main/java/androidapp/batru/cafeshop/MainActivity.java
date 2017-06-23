@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_nhan_vien:
                 xuLyNhanVienClicked();
                 break;
-            case R.id.nav_thong_ke:
+            case R.id.nav_thong_ke_hoa_don:
+                startActivity(new Intent(MainActivity.this, ThongKeHoaDonActivity.class));
                 break;
             case R.id.nav_thong_bao:
                 break;
@@ -167,7 +168,6 @@ public class MainActivity extends AppCompatActivity
     //endregion
 
     //region Database
-
     private void khoiTaoDatabase() {
         db = new Database(this, "banhang.sqlite", null, 1);
         db.queryData("CREATE TABLE IF NOT EXISTS NhanVien\n" +
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
                 "MaBanAn INTEGER,\n" +
                 "DaThanhToan BOOL,\n" +
                 "KhuyenMai INTEGER,\n" +
-                "ThoiGian DATETIME DEFAULT CURRENT_DATETIME,\n" +
+                "ThoiGian DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
                 "FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNhanVien),\n" +
                 "FOREIGN KEY (MaBanAn) REFERENCES BanAn(SoBan)\n" +
                 ");");
@@ -256,7 +256,5 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         db.close();
     }
-
     //endregion
-
 }

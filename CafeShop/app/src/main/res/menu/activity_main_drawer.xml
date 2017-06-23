@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_nhanvien"
             android:title="@string/nhan_vien" />
         <item
-            android:id="@+id/nav_thong_ke"
+            android:id="@+id/nav_thong_ke_hoa_don"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/thong_ke" />
+            android:title="Hóa đơn" />
     </group>
     <item android:title="@string/thiet_lap">
         <menu>
