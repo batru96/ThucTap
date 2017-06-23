@@ -254,8 +254,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "DESTROY", Toast.LENGTH_SHORT).show();
-        //db.close();
+        db.close();
     }
 
     //endregion

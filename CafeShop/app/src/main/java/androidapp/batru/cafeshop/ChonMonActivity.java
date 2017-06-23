@@ -116,7 +116,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
     private ArrayList<NhanVien> loadDanhSachNhanVien() {
         ArrayList<NhanVien> ds = new ArrayList<>();
-        Cursor cursor = MainActivity.db.getData("SELECT * FROM NHANVIEN");
+        Cursor cursor = MainActivity.db.getData("SELECT * FROM NHANVIEN WHERE ConLamViec = 1");
         while (cursor.moveToNext()) {
             NhanVien nv = new NhanVien();
             int manv = cursor.getInt(0);

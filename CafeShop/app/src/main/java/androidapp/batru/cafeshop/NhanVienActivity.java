@@ -69,29 +69,6 @@ public class NhanVienActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void xoaItem(final int position) {
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-//        dialog.setTitle("Thông báo");
-//        dialog.setMessage("Xác nhận xóa");
-//        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                NhanVien nhanvien = ds.get(position);
-//                db.queryData("UPDATE NhanVien SET ConLamViec = 0 WHERE MaNhanVien = " + nhanvien.getMaNv());
-//                ds = docDuLieuTuDatabase();
-//                adapter = new NhanVienAdapter(NhanVienActivity.this, R.layout.item_nhan_vien, ds);
-//                lvNhanVien.setAdapter(adapter);
-//            }
-//        });
-//        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
-//        dialog.show();
-//    }
-
     private ArrayList<NhanVien> docDuLieuTuDatabase() {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
         String query = "SELECT * FROM NhanVien";

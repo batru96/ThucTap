@@ -153,11 +153,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
             values.put("ConLamViec", !ckNghiViec.isChecked());
             Singleton.getInstance().database.update("NhanVien", values, "MaNhanVien = " + maNhanVienFromIntent, null);
         }
-        chuyenVeParentActivity();
-    }
-
-    private void chuyenVeParentActivity() {
-        startActivity(new Intent(this, NhanVienActivity.class));
+        onBackPressed();
     }
 
     private void clickHinhAnh() {
@@ -181,8 +177,6 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
         }, nam, thang, ngay);
         dialog.show();
     }
-
-
     //endregion
 
     //region override function
@@ -208,7 +202,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        chuyenVeParentActivity();
+        super.onBackPressed();
     }
     //endregion
 }

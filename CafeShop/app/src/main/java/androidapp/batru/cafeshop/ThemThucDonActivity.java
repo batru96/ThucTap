@@ -29,7 +29,6 @@ import static androidapp.batru.cafeshop.MainActivity.db;
 public class ThemThucDonActivity extends AppCompatActivity {
 
     private final String TAG = "ThemThucDonActivity";
-    private final int REQUEST_CAMERA_CODE = 111;
     private final int REQUEST_GALARY_CODE = 112;
 
     private EditText edtTen, edtGia, edtDonVi;
@@ -72,14 +71,6 @@ public class ThemThucDonActivity extends AppCompatActivity {
                 clickHinhAnh();
             }
         });
-
-        imgHinhAnh.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                longLickHinhAnh();
-                return true;
-            }
-        });
     }
 
     private void clickHinhAnh() {
@@ -88,19 +79,12 @@ public class ThemThucDonActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_GALARY_CODE);
     }
 
-    private void longLickHinhAnh() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = null;
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA_CODE) {
-                bitmap = (Bitmap) data.getExtras().get("data");
-            } else if (requestCode == REQUEST_GALARY_CODE) {
+            if (requestCode == REQUEST_GALARY_CODE) {
                 try {
                     Uri uri = data.getData();
                     InputStream is = getContentResolver().openInputStream(uri);
