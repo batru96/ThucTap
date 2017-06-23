@@ -90,6 +90,7 @@ public class BanAnAdapter extends ArrayAdapter<BanAn> {
                 banAn.setSoNguoi(soKhachMoiVao);
                 intent.putExtra(MainActivity.INTENT_BANAN, banAn);
                 intent.putExtra(MainActivity.INTENT_BANMOI, true);
+                dialogThemBanAn.dismiss();
                 context.startActivity(intent);
             }
         });

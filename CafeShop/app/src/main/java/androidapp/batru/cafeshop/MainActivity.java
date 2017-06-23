@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity
     public static Database db;
     public static final String INTENT_BANAN = "BanAn";
     public static final String INTENT_BANMOI = "BanMoi";
-    public static String MA_NV = "0";
     private final String TAG = "MainActivity";
 
     private DrawerLayout drawer;
@@ -62,6 +61,11 @@ public class MainActivity extends AppCompatActivity
 
         gvBanAn = (GridView) findViewById(R.id.gvBanAn);
         ds = new ArrayList<>();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         ds = docDuLieuTuDatabase();
         adapter = new BanAnAdapter(this, R.layout.item_ban_an, ds);
         gvBanAn.setAdapter(adapter);
@@ -129,9 +133,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_ban_hang:
-                xuLyBanHangClicked();
-                break;
             case R.id.nav_thuc_don:
                 xuLyThucDonClicked();
                 break;
@@ -159,9 +160,6 @@ public class MainActivity extends AppCompatActivity
 
     private void xuLyThucDonClicked() {
         startActivity(new Intent(this, ThucDonActivity.class));
-    }
-
-    private void xuLyBanHangClicked() {
     }
     //endregion
 
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity
                 "MaBanAn INTEGER,\n" +
                 "DaThanhToan BOOL,\n" +
                 "KhuyenMai INTEGER,\n" +
-                "ThoiGian DATETIME DEFAULT CURRENT_TIME,\n" +
+                "ThoiGian DATETIME DEFAULT CURRENT_DATETIME,\n" +
                 "FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNhanVien),\n" +
                 "FOREIGN KEY (MaBanAn) REFERENCES BanAn(SoBan)\n" +
                 ");");
@@ -218,8 +216,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void debug() {
-        db.queryData("DELETE FROM ChiTietHoaDon WHERE SoLuong = 0");
-
         Cursor cursor = db.getData("SELECT * FROM BanAn");
         Log.v(TAG, "---------Ban An---------");
         while (cursor.moveToNext()) {
@@ -250,5 +246,13 @@ public class MainActivity extends AppCompatActivity
             Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
+
     //endregion
+
 }

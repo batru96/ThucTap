@@ -33,6 +33,8 @@ public class ChonMonActivity extends AppCompatActivity {
 
     //region Properties
     private final String TAG = "CHONMON_ACTVITY";
+    public static final String INTENT_MaHoaDon = "MaHoaDon";
+    public static final String INTENT_SoBan = "SoBan";
 
     private ListView lvChonMon;
     private ChonMonAdapter adapter;
@@ -276,7 +278,7 @@ public class ChonMonActivity extends AppCompatActivity {
         // Neu danh sach tren man hinh thay doi so voi danh sach goc
         if (!isArrayListEquals(dsChonMon, dsChonMonGoc)) {
             int idx = 0;
-            for (ChonMon chonMon: dsChonMon) {
+            for (ChonMon chonMon : dsChonMon) {
                 ChonMon chonMonGoc = dsChonMonGoc.get(idx);
                 if (!isChonMonEquals(chonMon, chonMonGoc)) {
                     ContentValues values = new ContentValues();
@@ -297,6 +299,8 @@ public class ChonMonActivity extends AppCompatActivity {
         ContentValues hoaDonValues = new ContentValues();
         hoaDonValues.put("MaNV", maNV);
         Singleton.getInstance().database.update("HoaDon", hoaDonValues, "MaHoaDon = " + maHoaDonBanCoKhach, null);
+        // Nếu chi tiết hóa đơn nào mà có số lượng bằng 0 thì xóa nó đi luôn
+        MainActivity.db.queryData("DELETE FROM ChiTietHoaDon WHERE SoLuong = 0");
     }
 
     private boolean isChonMonEquals(ChonMon c1, ChonMon c2) {
@@ -318,7 +322,7 @@ public class ChonMonActivity extends AppCompatActivity {
     }
 
     private void xuLyHuy() {
-        startActivity(new Intent(this, MainActivity.class));
+        onBackPressed();
     }
 
     private void xuLyThuTien() {
@@ -335,6 +339,8 @@ public class ChonMonActivity extends AppCompatActivity {
             //MainActivity.db.queryData("UPDATE BanAn SET SoNguoi = 0 WHERE SoBan = " + banAn.getSoBan());
 
             Intent intent = new Intent(this, HoaDonActivity.class);
+            intent.putExtra(INTENT_MaHoaDon, maHoaDonBanCoKhach);
+            intent.putExtra(INTENT_SoBan, banAn.getSoBan());
             startActivity(intent);
             Cursor cursor = MainActivity.db.getData("SELECT * FROM ChiTietHoaDon WHERE MaHoaDon = " + maHoaDonBanCoKhach);
             while (cursor.moveToNext()) {
@@ -371,7 +377,7 @@ public class ChonMonActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
+        super.onBackPressed();
     }
     //endregion
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
+    android:background="#E0E0E0"
     android:orientation="vertical">
 
     <include
@@ -10,11 +12,83 @@
         layout="@layout/toolbar" />
 
     <LinearLayout
+        android:id="@+id/linearBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <RelativeLayout
+            android:id="@+id/revBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành tiền"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txtThanhTien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="#000"
+                android:textSize="16sp"
+                tools:text="45.000đ" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Khuyễn mãi"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnXong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/custom_button_hoadon"
+                android:text="Xong"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/btnHuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btnXong"
+                android:background="@drawable/custom_button_hoadon"
+                android:text="Hủy"
+                android:textColor="#FFF" />
+
+            <Spinner
+                android:id="@+id/spinnerKhuyenMai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/btnHuy"
+                android:gravity="end" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearBottom"
         android:layout_below="@id/toolbar"
         android:layout_margin="8dp"
-        android:background="#E0E0E0"
+        android:background="#FFF"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -27,70 +101,33 @@
             android:textSize="26sp" />
 
         <TextView
+            android:id="@+id/txtSoHoaDon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Số: 00002"
+            android:layout_margin="8dp"
             android:textColor="#000"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="Số: 00002" />
 
         <TextView
             android:layout_width="84dp"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
             android:text="Ngày: 22/06/2017(03:04 CH)"
             android:textColor="#000" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Danh sách món ăn"
+            android:textColor="#000" />
+
         <ListView
+            android:id="@+id/lvHoaDon"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#d3e" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thành tiền"
-                android:textColor="#000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="45.000đ"
-                android:textColor="#000"
-                android:textSize="16sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnHuy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_hoadon"
-                android:text="Hủy"
-                android:textColor="#FFF" />
-
-            <Button
-                android:id="@+id/btnXong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/custom_button_hoadon"
-                android:text="Xong"
-                android:textColor="#FFF" />
-        </LinearLayout>
-
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>

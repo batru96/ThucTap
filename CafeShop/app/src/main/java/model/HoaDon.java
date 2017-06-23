@@ -2,10 +2,6 @@ package model;
 
 import java.io.Serializable;
 
-/**
- * Created by hoangkhoa on 6/13/17.
- */
-
 public class HoaDon implements Serializable {
     private int maHoaDon;
     private int maNhanVien;

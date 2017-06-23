@@ -3,24 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_ban_hang"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/ban_hang" />
-        <item
             android:id="@+id/nav_thuc_don"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_food"
             android:title="@string/thuc_don" />
+        <item
+            android:id="@+id/nav_nhan_vien"
+            android:icon="@drawable/ic_nhanvien"
+            android:title="@string/nhan_vien" />
         <item
             android:id="@+id/nav_thong_ke"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/thong_ke" />
-
-        <item
-            android:id="@+id/nav_nhan_vien"
-            android:title="@string/nhan_vien"/>
     </group>
-    <item
-        android:title="@string/thiet_lap">
+    <item android:title="@string/thiet_lap">
         <menu>
             <group android:checkableBehavior="single">
                 <item
