@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_thong_ke_hoa_don:
                 startActivity(new Intent(MainActivity.this, ThongKeHoaDonActivity.class));
                 break;
-            case R.id.nav_thong_bao:
+            case R.id.nav_bao_cao:
+                startActivity(new Intent(MainActivity.this, BaoCaoActivity.class));
                 break;
             case R.id.nav_cai_dat:
                 break;
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity
     //region Database
     private void khoiTaoDatabase() {
         db = new Database(this, "banhang.sqlite", null, 1);
+        db.queryData("DELETE FROM HoaDon WHERE MaHoaDon = 3");
         db.queryData("CREATE TABLE IF NOT EXISTS NhanVien\n" +
                 "(\n" +
                 "MaNhanVien INTEGER PRIMARY KEY AUTOINCREMENT,\n" +

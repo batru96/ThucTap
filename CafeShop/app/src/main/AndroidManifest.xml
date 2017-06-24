@@ -42,9 +42,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity
-            android:name=".QuanLyNhanVienActivity"
-            android:windowSoftInputMode="adjustUnspecified">
+        <activity android:name=".QuanLyNhanVienActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NhanVienActivity" />
@@ -64,6 +62,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ThongKeHoaDonActivity" />
         </activity>
+        <activity android:name=".BaoCaoActivity"></activity>
     </application>
 
 </manifest>
