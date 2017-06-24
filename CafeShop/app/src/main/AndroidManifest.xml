@@ -54,8 +54,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChonMonActivity" />
         </activity>
-        <activity android:name=".BaoCaoActivity" />
-        <activity android:name=".ThongKeHoaDonActivity"></activity>
+        <activity android:name=".ThongKeHoaDonActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".ChiTietHoaDonActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ThongKeHoaDonActivity" />
+        </activity>
     </application>
 
 </manifest>

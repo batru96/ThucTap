@@ -1,5 +1,6 @@
 package androidapp.batru.cafeshop;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ import model.ThongKeHoaDon;
 
 public class ThongKeHoaDonActivity extends AppCompatActivity {
 
+    public static final String INTENT_MaHoaDon = "MaHoaDon";
+    public static final String INTENT_KhuyenMai = "KhuyenMai";
+
     private ListView lvThongKe;
     private ArrayList<ThongKeHoaDon> dsHoaDon;
     private HoaDonAdapter hoaDonAdapter;
@@ -33,12 +37,7 @@ public class ThongKeHoaDonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_thong_ke_hoa_don);
 
         initControls();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadListView();
+        initEvents();
     }
 
     private void loadListView() {
@@ -46,7 +45,7 @@ public class ThongKeHoaDonActivity extends AppCompatActivity {
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 int maHoaDon = cursor.getInt(0);
-                int khuyeMai = cursor.getInt(4);
+                int khuyenMai = cursor.getInt(4);
                 Cursor cursorTongTien = MainActivity.db.getData("SELECT SoLuong, DonGia FROM ChiTietHoaDon WHERE MaHoaDon = " + maHoaDon);
                 long tongTien = 0;
                 if (cursorTongTien.getCount() > 0) {
@@ -56,7 +55,7 @@ public class ThongKeHoaDonActivity extends AppCompatActivity {
                         tongTien += soLuong * donGia;
                     }
                 }
-                long tienKhuyenMai = tongTien * khuyeMai / 100;
+                long tienKhuyenMai = tongTien * khuyenMai / 100;
                 tongTien -= tienKhuyenMai;
                 int soBan = cursor.getInt(2);
                 String thoiGian = cursor.getString(5);
@@ -77,5 +76,26 @@ public class ThongKeHoaDonActivity extends AppCompatActivity {
 
         lvThongKe = (ListView) findViewById(R.id.listviewThongKe);
         dsHoaDon = new ArrayList<>();
+        loadListView();
+    }
+
+    private void initEvents() {
+        lvThongKe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int maHoaDon = dsHoaDon.get(i).getMaHoaDon();
+                Cursor cursor = MainActivity.db.getData("SELECT KhuyenMai FROM HoaDon WHERE MaHoaDon = " + maHoaDon);
+                if (cursor.moveToNext()) {
+                    int khuyenMai = cursor.getInt(0);
+                    Intent intent = new Intent(ThongKeHoaDonActivity.this, ChiTietHoaDonActivity.class);
+                    intent.putExtra(INTENT_MaHoaDon, dsHoaDon.get(i).getMaHoaDon());
+                    intent.putExtra(INTENT_KhuyenMai, khuyenMai);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(ThongKeHoaDonActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
