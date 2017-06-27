@@ -4,16 +4,14 @@ import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adapter.ChiTietAdapter;
 import model.ChiTiet;
 
-public class ChiTietHoaDonActivity extends AppCompatActivity {
+public class BaoCaoChiTietActivity extends AppCompatActivity {
 
     private ListView lvChiTiet;
     private ArrayList<ChiTiet> ds;
@@ -22,7 +20,7 @@ public class ChiTietHoaDonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chi_tiet_hoa_don);
+        setContentView(R.layout.activity_bao_cao_chi_tiet);
         initControls();
     }
 
@@ -34,8 +32,8 @@ public class ChiTietHoaDonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         
-        int maHoaDon = getIntent().getIntExtra(ThongKeHoaDonActivity.INTENT_MaHoaDon, -1);
-        int khuyenMai = getIntent().getIntExtra(ThongKeHoaDonActivity.INTENT_KhuyenMai, -1);
+        int maHoaDon = getIntent().getIntExtra(BaoCaoActivity.INTENT_MaHoaDon, -1);
+        int khuyenMai = getIntent().getIntExtra(BaoCaoActivity.INTENT_KhuyenMai, -1);
 
         lvChiTiet = (ListView) findViewById(R.id.lvChiTiet);
         ds = new ArrayList<>();

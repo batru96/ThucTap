@@ -109,26 +109,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void taoBanAn() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Thông báo");
-        dialog.setMessage("Thêm bàn ăn mới?");
-        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                db.queryData("INSERT INTO BanAn VALUES (null, 0)");
-                Cursor cursor = db.getData("SELECT * FROM BanAn");
-                cursor.moveToLast();
-                BanAn banAn = new BanAn(cursor.getInt(0), cursor.getInt(1));
-                ds.add(banAn);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        dialog.show();
+        Cursor checkCursor = db.getData("SELECT * FROM BanAn");
+        if (checkCursor.getCount() < 20) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Thông báo");
+            dialog.setMessage("Thêm bàn ăn mới?");
+            dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    db.queryData("INSERT INTO BanAn VALUES (null, 0)");
+                    Cursor cursor = db.getData("SELECT * FROM BanAn");
+                    cursor.moveToLast();
+                    BanAn banAn = new BanAn(cursor.getInt(0), cursor.getInt(1));
+                    ds.add(banAn);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            dialog.show();
+        } else {
+            Toast.makeText(this, "Số bàn ăn đã tới giới hạn! Vui lòng liên hệ nhà phát triển để mở rộng thêm!", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -141,9 +146,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_nhan_vien:
                 xuLyNhanVienClicked();
-                break;
-            case R.id.nav_thong_ke_hoa_don:
-                startActivity(new Intent(MainActivity.this, ThongKeHoaDonActivity.class));
                 break;
             case R.id.nav_bao_cao:
                 startActivity(new Intent(MainActivity.this, BaoCaoActivity.class));
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity
                 "SoNguoi INTEGER\n" +
                 ");");
 
-       db.queryData("CREATE TABLE IF NOT EXISTS MonAn\n" +
+        db.queryData("CREATE TABLE IF NOT EXISTS MonAn\n" +
                 "(\n" +
                 "MaMonAn INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "TenMonAn VARCHAR,\n" +
@@ -251,12 +253,6 @@ public class MainActivity extends AppCompatActivity
         while (cursor.moveToNext()) {
             Log.v(TAG, "MaHoaDon: " + cursor.getInt(0) + " || MaMonAn: " + cursor.getInt(1) + " || SoLuong: " + cursor.getInt(2) + " || DonGia: " + cursor.getLong(3));
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
     }
     //endregion
 }

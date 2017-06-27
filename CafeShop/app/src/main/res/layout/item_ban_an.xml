@@ -5,9 +5,10 @@
     android:orientation="vertical">
 
     <Button
-        android:layout_margin="4dp"
         android:id="@+id/btnBanAn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_ban_trong" />
+        android:layout_margin="4dp"
+        android:background="@drawable/button_ban_trong"
+        android:textColor="#FFF" />
 </LinearLayout>

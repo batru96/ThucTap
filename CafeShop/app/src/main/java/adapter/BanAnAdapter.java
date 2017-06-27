@@ -45,6 +45,7 @@ public class BanAnAdapter extends ArrayAdapter<BanAn> {
         button.setText("Bàn " + (position + 1));
         final BanAn banAn = ds.get(position);
         if (banAn.getSoNguoi() != 0) {
+            button.setTextColor(context.getResources().getColor(android.R.color.black));
             button.setBackground(context.getResources().getDrawable(R.drawable.button_co_khach));
         } else {
             button.setBackground(context.getResources().getDrawable(R.drawable.button_ban_trong));

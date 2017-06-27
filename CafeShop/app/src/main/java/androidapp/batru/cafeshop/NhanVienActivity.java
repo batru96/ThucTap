@@ -1,10 +1,8 @@
 package androidapp.batru.cafeshop;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,14 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adapter.NhanVienAdapter;
-import database.Database;
 import model.NhanVien;
-import singleton.Singleton;
 
 import static androidapp.batru.cafeshop.MainActivity.db;
 
@@ -62,7 +57,7 @@ public class NhanVienActivity extends AppCompatActivity {
     }
 
     private void suaItem(int position) {
-        Intent intent = new Intent(this, QuanLyNhanVienActivity.class);
+        Intent intent = new Intent(this, NhanVienQLActivity.class);
         NhanVien nv = ds.get(position);
         intent.putExtra("NhanVien", nv);
         intent.putExtra("FROM", "Sua");
@@ -109,7 +104,7 @@ public class NhanVienActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add) {
-            Intent intent = new Intent(this, QuanLyNhanVienActivity.class);
+            Intent intent = new Intent(this, NhanVienQLActivity.class);
 
             intent.putExtra("FROM", "Them");
 

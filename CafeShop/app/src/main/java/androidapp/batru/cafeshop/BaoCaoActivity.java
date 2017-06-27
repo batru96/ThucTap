@@ -1,10 +1,10 @@
 package androidapp.batru.cafeshop;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,9 +19,11 @@ import java.util.Calendar;
 
 import adapter.HoaDonAdapter;
 import model.ThongKeHoaDon;
-import singleton.Singleton;
 
 public class BaoCaoActivity extends AppCompatActivity {
+
+    public static final String INTENT_MaHoaDon = "MaHoaDon";
+    public static final String INTENT_KhuyenMai = "KhuyenMai";
 
     private Spinner spinner;
     private ArrayList<String> dsSpinner;
@@ -79,6 +81,28 @@ public class BaoCaoActivity extends AppCompatActivity {
 
             }
         });
+
+        lvBaoCao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                listviewItemClick(i);
+            }
+        });
+    }
+
+    private void listviewItemClick(int position) {
+        int maHoaDon = dsThongKe.get(position).getMaHoaDon();
+        Cursor cursor = MainActivity.db.getData("SELECT KhuyenMai FROM HoaDon WHERE MaHoaDon = " + maHoaDon);
+        if (cursor.moveToNext()) {
+            int khuyenMai = cursor.getInt(0);
+            Intent intent = new Intent(this, BaoCaoChiTietActivity.class);
+            intent.putExtra(INTENT_MaHoaDon, dsThongKe.get(position).getMaHoaDon());
+            intent.putExtra(INTENT_KhuyenMai, khuyenMai);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadListView(int position) {
@@ -130,7 +154,7 @@ public class BaoCaoActivity extends AppCompatActivity {
                 adapter = new HoaDonAdapter(this, R.layout.item_thong_ke, dsThongKe);
                 lvBaoCao.setAdapter(adapter);
             }
-            txtTongThu.setText("Tổng thu: " + tongThu);
+            txtTongThu.setText("Tổng thu: " + tongThu + " đ");
         }
     }
 }

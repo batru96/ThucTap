@@ -61,7 +61,7 @@ public class ThucDonActivity extends AppCompatActivity{
     }
 
     private void suaItem(int position) {
-        Intent intent = new Intent(this, SuaThucDonActivity.class);
+        Intent intent = new Intent(this, ThucDonSuaActivity.class);
         MonAn monAn = dsMonAn.get(position);
         intent.putExtra("MONAN", monAn);
         startActivity(intent);
@@ -137,7 +137,7 @@ public class ThucDonActivity extends AppCompatActivity{
     }
 
     private void xuLyThemMon() {
-        startActivity(new Intent(this, ThemThucDonActivity.class));
+        startActivity(new Intent(this, ThucDonThemActivity.class));
     }
 
     @Override

@@ -3,12 +3,10 @@ package androidapp.batru.cafeshop;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,13 +28,11 @@ import model.NhanVien;
 import singleton.Singleton;
 import singleton.SingletonActivity;
 
-import static androidapp.batru.cafeshop.MainActivity.db;
-
-public class QuanLyNhanVienActivity extends AppCompatActivity {
+public class NhanVienQLActivity extends AppCompatActivity {
 
     //region properties
     private final int REQUEST_GALARY_CODE = 113;
-    private final String TAG = "QuanLyNhanVienActivity";
+    private final String TAG = "NhanVienQLActivity";
 
     private ImageView imgNhanVien;
     private EditText edtTen;
@@ -56,7 +52,7 @@ public class QuanLyNhanVienActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quan_ly_nhan_vien);
+        setContentView(R.layout.activity_nhan_vien_ql);
 
         initControls();
         ganEvents();

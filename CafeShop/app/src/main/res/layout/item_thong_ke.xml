@@ -8,47 +8,70 @@
     <RelativeLayout
         android:id="@+id/linearTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
 
         <TextView
             android:id="@+id/txtSoHoaDon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
             android:text="SoHoaDon: 1"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtThoiGian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:text="12/04/2017 12:00"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent">
 
         <TextView
             android:id="@+id/txtSoBan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_marginStart="28dp"
             android:text="SoBan: 12"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/txtTongTien"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="33dp"
             android:text="120000 d"
-            android:textColor="#000"
-            android:textSize="26sp" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimaryDark"
+        android:textColor="@android:color/holo_green_light" />
 </LinearLayout>

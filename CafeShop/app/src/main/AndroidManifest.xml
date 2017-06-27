@@ -27,12 +27,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ThemThucDonActivity">
+        <activity android:name=".ThucDonThemActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ThucDonActivity" />
         </activity>
-        <activity android:name=".SuaThucDonActivity">
+        <activity android:name=".ThucDonSuaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ThucDonActivity" />
@@ -42,7 +42,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".QuanLyNhanVienActivity">
+        <activity android:name=".NhanVienQLActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NhanVienActivity" />
@@ -52,17 +52,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChonMonActivity" />
         </activity>
-        <activity android:name=".ThongKeHoaDonActivity">
+        <activity android:name=".BaoCaoChiTietActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BaoCaoActivity" />
+        </activity>
+        <activity android:name=".BaoCaoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ChiTietHoaDonActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ThongKeHoaDonActivity" />
-        </activity>
-        <activity android:name=".BaoCaoActivity"></activity>
     </application>
 
 </manifest>
