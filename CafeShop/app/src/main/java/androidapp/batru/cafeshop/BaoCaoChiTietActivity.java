@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class BaoCaoChiTietActivity extends AppCompatActivity {
     private ListView lvChiTiet;
     private ArrayList<ChiTiet> ds;
     private ChiTietAdapter adapter;
+
+    private TextView txtSoHoaDon, txtKhuyenMai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +32,14 @@ public class BaoCaoChiTietActivity extends AppCompatActivity {
         toolbar.setTitle("Chi tiết hóa đơn");
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        txtKhuyenMai = (TextView) findViewById(R.id.txtKhuyenMai);
+        txtSoHoaDon = (TextView) findViewById(R.id.txtSoHoaDon);
         
         int maHoaDon = getIntent().getIntExtra(BaoCaoActivity.INTENT_MaHoaDon, -1);
         int khuyenMai = getIntent().getIntExtra(BaoCaoActivity.INTENT_KhuyenMai, -1);
 
+        txtSoHoaDon.setText("Số hóa đơn: " + maHoaDon);
+        txtKhuyenMai.setText("Khuyến mãi " + khuyenMai + " %");
         lvChiTiet = (ListView) findViewById(R.id.lvChiTiet);
         ds = new ArrayList<>();
         Cursor cursor = MainActivity.db.getData("SELECT m.TenMonAn, c.DonGia, c.SoLuong, m.HinhAnh " +

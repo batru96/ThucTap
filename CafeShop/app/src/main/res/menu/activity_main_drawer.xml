@@ -18,10 +18,6 @@
                     android:id="@+id/nav_bao_cao"
                     android:icon="@drawable/ic_menu_share"
                     android:title="Báo cáo" />
-                <item
-                    android:id="@+id/nav_cai_dat"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="@string/cai_dat" />
             </group>
         </menu>
     </item>

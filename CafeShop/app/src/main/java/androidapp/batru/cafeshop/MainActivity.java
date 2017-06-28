@@ -150,8 +150,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_bao_cao:
                 startActivity(new Intent(MainActivity.this, BaoCaoActivity.class));
                 break;
-            case R.id.nav_cai_dat:
-                break;
             default:
                 break;
         }

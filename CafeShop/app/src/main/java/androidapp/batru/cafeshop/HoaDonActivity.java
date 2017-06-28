@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import adapter.ChiTietHoaDonAdapter;
 import model.ChiTietHoaDon;
+import singleton.Singleton;
 
 public class HoaDonActivity extends AppCompatActivity {
 
@@ -113,7 +114,7 @@ public class HoaDonActivity extends AppCompatActivity {
                 int khuyenMai = getNumberFromString(dsKhuyenMai.get(i));
                 int tienKhuyenMai = (int) (tongtien * khuyenMai / 100);
                 tongtien = tongtien - tienKhuyenMai;
-                txtThanhTien.setText(tongtien + " đ");
+                txtThanhTien.setText(Singleton.getInstance().decimalFormat.format(tongtien) + " đ");
             }
 
             @Override
