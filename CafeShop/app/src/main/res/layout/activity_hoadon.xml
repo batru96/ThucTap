@@ -36,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:textColor="#000"
                 android:textSize="16sp"
                 tools:text="45.000đ" />
@@ -58,7 +59,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:background="@drawable/custom_button_hoadon"
                 android:text="Xong"
                 android:textColor="#FFF" />
@@ -68,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/btnXong"
+                android:layout_toLeftOf="@id/btnXong"
                 android:background="@drawable/custom_button_hoadon"
                 android:text="Hủy"
                 android:textColor="#FFF" />
@@ -78,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/btnHuy"
+                android:layout_toLeftOf="@id/btnHuy"
                 android:gravity="end" />
         </RelativeLayout>
     </LinearLayout>

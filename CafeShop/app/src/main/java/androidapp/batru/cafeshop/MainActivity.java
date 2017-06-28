@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
 
         khoiTaoDatabase();
         initControls();
-        debug();
+        //debug();
     }
 
     private void initControls() {
@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity
     //region Database
     private void khoiTaoDatabase() {
         db = new Database(this, "banhang.sqlite", null, 1);
-        db.queryData("DELETE FROM HoaDon WHERE MaHoaDon = 3");
         db.queryData("CREATE TABLE IF NOT EXISTS NhanVien\n" +
                 "(\n" +
                 "MaNhanVien INTEGER PRIMARY KEY AUTOINCREMENT,\n" +

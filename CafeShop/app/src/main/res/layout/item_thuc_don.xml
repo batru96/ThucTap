@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/image_listview"
+        android:layout_toRightOf="@id/image_listview"
         android:gravity="center_vertical"
         android:padding="8dp">
 
@@ -42,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:text="Giá bán:" />
 
             <TextView
@@ -55,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="Ngừng bán"
                 android:textColor="#ff00"
                 android:textSize="16sp"
@@ -64,10 +67,12 @@
     </RelativeLayout>
 
     <ImageButton
+        android:contentDescription="@string/load_failed"
         android:id="@+id/chiTietButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
         android:background="@color/fbutton_color_transparent"
         android:src="@drawable/ic_arrow_chi_tiet" />
