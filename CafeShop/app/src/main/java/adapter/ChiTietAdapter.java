@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import androidapp.batru.cafeshop.R;
 import model.ChiTiet;
 import model.ThongKeHoaDon;
+import singleton.Singleton;
 
 public class ChiTietAdapter extends BaseAdapter {
     private Context context;
@@ -62,7 +63,8 @@ public class ChiTietAdapter extends BaseAdapter {
             }
             txtTen.setText(item.getTenMonAn());
             txtSoLuong.setText("Số lượng: " + item.getSoLuong());
-            txtDonGia.setText(item.getDonGia() + " đ");
+            txtDonGia.setText("Chi tiết: " +
+                    Singleton.getInstance().decimalFormat.format(item.getDonGia()) + " đ");
         }
 
         return view;

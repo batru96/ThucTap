@@ -62,7 +62,7 @@ public class HoaDonAdapter extends BaseAdapter{
         txtMaHoaDon.setText("Số hóa đơn: " + item.getMaHoaDon());
         txtSoBan.setText("Số bàn: " + item.getMaBan());
         txtThoiGian.setText(item.getThoiGian());
-        txtTongTien.setText("Tổng tiền: " + item.getTongTien() + " đ");
+        txtTongTien.setText("Tổng tiền: " + Singleton.getInstance().decimalFormat.format(item.getTongTien()) + " đ");
         return view;
     }
 }

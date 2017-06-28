@@ -13,12 +13,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import adapter.HoaDonAdapter;
 import model.ThongKeHoaDon;
+import singleton.Singleton;
 
 public class BaoCaoActivity extends AppCompatActivity {
 
@@ -99,8 +101,7 @@ public class BaoCaoActivity extends AppCompatActivity {
             intent.putExtra(INTENT_MaHoaDon, dsThongKe.get(position).getMaHoaDon());
             intent.putExtra(INTENT_KhuyenMai, khuyenMai);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
         }
     }
@@ -154,7 +155,7 @@ public class BaoCaoActivity extends AppCompatActivity {
                 adapter = new HoaDonAdapter(this, R.layout.item_thong_ke, dsThongKe);
                 lvBaoCao.setAdapter(adapter);
             }
-            txtTongThu.setText("Tổng thu: " + tongThu + " đ");
+            txtTongThu.setText("Tổng thu: " + Singleton.getInstance().decimalFormat.format(tongThu) + " đ");
         }
     }
 }

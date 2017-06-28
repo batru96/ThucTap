@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingTop="8dp">
 
     <ImageView
         android:id="@+id/imgHinhAnh"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/load_failed" />
 
     <RelativeLayout
+        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,22 +23,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cafe sua da"
+            android:textColor="@color/colorBlack"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/txtSoLuong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="So luong: 2"
+            android:textColor="@color/colorBlack"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/txtDonGia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:text="20000 d"
+            android:textColor="@color/colorBlack"
             android:textSize="16sp" />
     </RelativeLayout>
 </LinearLayout>

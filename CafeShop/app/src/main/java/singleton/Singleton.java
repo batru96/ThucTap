@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 
 import androidapp.batru.cafeshop.MainActivity;
 
@@ -20,6 +21,8 @@ public class Singleton {
     }
 
     public SQLiteDatabase database = MainActivity.db.getWritableDatabase();
+
+    public DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     public byte[] getByteArrayForImageView(ImageView image) {
         BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();

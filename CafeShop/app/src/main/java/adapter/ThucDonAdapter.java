@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import androidapp.batru.cafeshop.R;
 import model.MonAn;
+import singleton.Singleton;
 
 /**
  * Created by hoangkhoa on 5/26/17.
@@ -63,7 +64,7 @@ public class ThucDonAdapter extends BaseAdapter {
 
         MonAn sanPham = ds.get(position);
         txtTen.setText(sanPham.getTen());
-        txtGia.setText(sanPham.getGia() + "đ");
+        txtGia.setText(Singleton.getInstance().decimalFormat.format(sanPham.getGia()) + " đ");
         if (!sanPham.isConHang()) {
             txtNgungBan.setVisibility(View.VISIBLE);
         }

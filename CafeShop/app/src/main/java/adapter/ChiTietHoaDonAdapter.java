@@ -17,6 +17,7 @@ import java.util.List;
 
 import androidapp.batru.cafeshop.R;
 import model.ChiTietHoaDon;
+import singleton.Singleton;
 
 public class ChiTietHoaDonAdapter extends BaseAdapter{
     private Activity context;
@@ -57,8 +58,8 @@ public class ChiTietHoaDonAdapter extends BaseAdapter{
         ChiTietHoaDon chiTietHoaDon = ds.get(i);
         txtTen.setText(chiTietHoaDon.getTen());
         txtSoLuong.setText(chiTietHoaDon.getSoluong() + "");
-        txtDonGia.setText(chiTietHoaDon.getDonGia() + "đ");
-        txtTongTien.setText(chiTietHoaDon.getSoluong() * chiTietHoaDon.getDonGia() + "đ");
+        txtDonGia.setText(Singleton.getInstance().decimalFormat.format(chiTietHoaDon.getDonGia()) + " đ");
+        txtTongTien.setText(Singleton.getInstance().decimalFormat.format(chiTietHoaDon.getSoluong() * chiTietHoaDon.getDonGia()) + "đ");
 
         return view;
     }

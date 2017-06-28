@@ -77,12 +77,13 @@
                 android:id="@+id/editGiaBan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:background="@null"
                 android:gravity="end"
                 android:hint="Nhập giá bán"
                 android:inputType="number"
-                android:textColorHint="#E91E63" />
+                android:textColorHint="#E91E63"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
 

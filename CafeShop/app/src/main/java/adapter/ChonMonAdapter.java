@@ -64,7 +64,7 @@ public class ChonMonAdapter extends BaseAdapter {
         Bitmap bitmap = Singleton.getInstance().decodeBitmapFromByteArray(chonMon.getHinhAnh());
         imgHinhAnh.setImageBitmap(bitmap);
 
-        txtGia.setText(chonMon.getGia() + "đ");
+        txtGia.setText(Singleton.getInstance().decimalFormat.format(chonMon.getGia()) + " đ");
         txtTen.setText(chonMon.getTen() + "");
         txtSoLuong.setText(chonMon.getSoLuong() + "");
 
